@@ -16,5 +16,9 @@ class VerifyCsrfToken extends Middleware
         '/get_details',
         '/add_details',
         '/update_details/*',
+        '/get_accounts',
+        '/add_accounts',
+        '/update_accounts/*',
+
     ];
 }
