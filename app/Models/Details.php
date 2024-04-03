@@ -19,6 +19,11 @@ class Details extends Model
         'city',
         'province',
         'commodity',
+        'authorized_rep',
+        'category',
+        'contact_no',
+        'email',
+        'others',
     ];
 
     public $timestamps = false;

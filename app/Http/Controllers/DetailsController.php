@@ -20,6 +20,11 @@ class DetailsController extends Controller
             'city' => 'required',
             'province' => 'required',
             'commodity' => 'required',
+            'authorized_rep' =>'required',
+            'category' =>'required',
+            'contact_no' =>'required',
+            'email' =>'required',
+            'others' => 'required',
         ]);
 
         // Create a new Details model instance and fill it with request data
