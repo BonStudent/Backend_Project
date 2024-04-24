@@ -24,6 +24,7 @@ class Details extends Model
         'contact_no',
         'email',
         'others',
+        'application',
     ];
 
     public $timestamps = false;

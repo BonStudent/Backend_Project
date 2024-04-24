@@ -25,6 +25,7 @@ class DetailsController extends Controller
             'contact_no' =>'required',
             'email' =>'required',
             'others' => 'required',
+            'application' => 'required',
         ]);
 
         // Create a new Details model instance and fill it with request data
@@ -41,17 +42,22 @@ class DetailsController extends Controller
     {
         // Find the record by ID
         $details = Details::findOrFail($id);
-
         // Validate incoming request data
         $request->validate([
-            'status' => 'required',
-            'tenement_number' => 'required',
-            'tenement_name' => 'required',
-            'area_hectares' => 'required',
-            'barangay' => 'required',
-            'city' => 'required',
-            'province' => 'required',
-            'commodity' => 'required',
+            'status' => 'nullable',
+            'tenement_number' => 'nullable',
+            'tenement_name' => 'nullable',
+            'area_hectares' => 'nullable',
+            'barangay' => 'nullable',
+            'city' => 'nullable',
+            'province' => 'nullable',
+            'commodity' => 'nullable',
+            'authorized_rep' =>'nullable',
+            'category' =>'nullable',
+            'contact_no' =>'nullable',
+            'email' =>'nullable',
+            'others' => 'nullable',
+            'application' => 'nullable',
         ]);
 
         // Update the record with the new data
