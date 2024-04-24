@@ -45,4 +45,10 @@ class AccountsController extends Controller
         // Optionally, you can return a response indicating success
         return response()->json(['message' => 'Record updated successfully'], 200);
     }
+
+    public function currentUser(Request $request)
+    {
+        $user = $request->user(); // Retrieve current authenticated user
+        return response()->json(['username' => $user->username]);
+    }
 }
