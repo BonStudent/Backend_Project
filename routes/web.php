@@ -6,6 +6,8 @@ use App\Models\Accounts;
 
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\AccountsController;
+use App\Http\Controllers\RemarksController;
+use App\Http\Controllers\RecommendationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,9 +40,28 @@ Route::get('/get_accounts', function () {
     return response()->json($accounts);
 });
 
+Route::get('/get_remarks', function () {
+    // Example: Retrieve all records from the "tabledetails" table
+    $accounts = Accounts::all();
+
+    // Example: Return the retrieved records as JSON
+    return response()->json($accounts);
+});
+
+Route::get('/get_recommendation', function () {
+    // Example: Retrieve all records from the "tabledetails" table
+    $accounts = Accounts::all();
+
+    // Example: Return the retrieved records as JSON
+    return response()->json($accounts);
+});
 
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
 Route::post('/add_accounts', [AccountsController::class, 'create']);
 Route::post('/update_accounts/{id}/', [AccountsController::class, 'update']);
+Route::post('/add_remarks', [RemarksController::class, 'create']);
+Route::post('/update_remarks/{id}/', [RemarksController::class, 'update']);
+Route::post('/add_recommendation', [RecommendationController::class, 'create']);
+Route::post('/update_recommendation/{id}/', [RecommendationController::class, 'update']);

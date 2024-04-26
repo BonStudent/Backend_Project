@@ -24,6 +24,12 @@ return [
         '/get_accounts/', 
         '/add_accounts/', 
         '/update_accounts/*', 
+        '/get_remarks/', 
+        '/add_remarks/', 
+        '/update_remarks/*',
+        '/get_recommendation/', 
+        '/add_recommendation/', 
+        '/update_recommendation/*',
     ],
 
     'allowed_methods' => ['*'],
