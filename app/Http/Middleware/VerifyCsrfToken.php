@@ -25,5 +25,13 @@ class VerifyCsrfToken extends Middleware
         '/get_recommendation/', 
         '/add_recommendation/', 
         '/update_recommendation/*',
+        '/get_mtsrstatus/', 
+        '/add_mtsrstatus/', 
+        '/update_mtsrstatus/*',
+        '/get_files/', 
+        '/add_uploads/',
+        // '/add_multiple_uploads/',
+        // '/update_uploads/*',
+        
     ];
 }
