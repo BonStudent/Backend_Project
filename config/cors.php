@@ -36,7 +36,8 @@ return [
         '/get_files/', 
         '/add_uploads/',
         // '/add_multiple_uploads/',
-        // '/update_uploads/*',
+        '/update_uploads/*',
+        '/add_images',
         
     ],
 

@@ -29,6 +29,14 @@ class Recommendation extends Model
         'input15',
         'input16',
         'input17',
+        'input18',
+        'input19',
+        'input20',
+        'images1',
+        'images2',
+        'images3',
+        'images4',
+        'images5',
     ];
 
     public $timestamps = false;

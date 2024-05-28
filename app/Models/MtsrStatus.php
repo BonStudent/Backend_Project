@@ -13,6 +13,7 @@ class MtsrStatus extends Model
     protected $fillable = [
         'id_reference',
         'mtsr',
+        'overallstatus',
     ];
 
     public $timestamps = false;

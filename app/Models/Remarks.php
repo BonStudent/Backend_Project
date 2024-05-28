@@ -29,6 +29,9 @@ class Remarks extends Model
         'input15',
         'input16',
         'input17',
+        'input18',
+        'input19',
+        'input20',
     ];
 
     public $timestamps = false;

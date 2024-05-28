@@ -7,6 +7,7 @@ use App\Models\Remarks;
 use App\Models\Recommendation;
 use App\Models\MtsrStatus;
 use App\Models\Uploads;
+use App\Models\Images;
 
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\AccountsController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\RemarksController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\MtsrStatusController;
 use App\Http\Controllers\UploadsController;
+use App\Http\Controllers\ImagesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +77,13 @@ Route::get('/get_files', function () {
     // Example: Return the retrieved records as JSON
     return response()->json($accounts);
 });
+Route::get('/get_images', function () {
+    // Example: Retrieve all records from the "tabledetails" table
+    $accounts = Images::all();
+
+    // Example: Return the retrieved records as JSON
+    return response()->json($accounts);
+});
 
 
 Route::post('/add_details', [DetailsController::class, 'create']);
@@ -88,6 +97,5 @@ Route::post('/update_recommendation/{id_reference}/', [RecommendationController:
 Route::post('/add_mtsrstatus', [MtsrStatusController::class, 'create']);
 Route::post('/update_mtsrstatus/{id_reference}/', [MtsrStatusController::class, 'update']);
 Route::post('/add_uploads', [UploadsController::class, 'create']);
-
-// Route::post('/add_multiple_uploads/', [UploadsController::class, 'create']);
-// Route::post('/update_uploads/{id_reference}/', [UploadsController::class, 'update']);
+Route::post('/update_uploads/{id_reference}/', [UploadsController::class, 'update']);
+Route::post('/add_images', [ImagesController::class, 'store'])->name('images.store');

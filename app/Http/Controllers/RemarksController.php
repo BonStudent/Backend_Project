@@ -30,6 +30,9 @@ class RemarksController extends Controller
             'input15' => 'nullable',
             'input16' => 'nullable',
             'input17' => 'nullable',
+            'input18' => 'nullable',
+            'input19' => 'nullable',
+            'input20' => 'nullable',
         ]);
 
         // Create a new Details model instance and fill it with request data
@@ -68,6 +71,9 @@ public function update(Request $request, $id_reference)
             'input15' => 'nullable',
             'input16' => 'nullable',
             'input17' => 'nullable',
+            'input18' => 'nullable',
+            'input19' => 'nullable',
+            'input20' => 'nullable',
         ]);
 
         // Convert empty strings to NULL
@@ -107,6 +113,9 @@ public function update(Request $request, $id_reference)
             'input15' => 'nullable',
             'input16' => 'nullable',
             'input17' => 'nullable',
+            'input18' => 'nullable',
+            'input19' => 'nullable',
+            'input20' => 'nullable',
         ]);
         // Convert empty strings to NULL
         foreach ($validatedData as $key => $value) {

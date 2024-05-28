@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\mtssOSTC;
+use App\Models\MtsrStatus;
 
 class mtssOSTCController extends Controller
 {
@@ -24,7 +24,7 @@ class mtssOSTCController extends Controller
         ]);
 
         // Create a new Details model instance and fill it with request data
-        $mtssOSTC = new mtssOSTC();
+        $mtssOSTC = new MtsrStatus();
         $mtssOSTC->fill($request->all());
         $mtssOSTC->save();
 
@@ -36,7 +36,7 @@ class mtssOSTCController extends Controller
     public function update(Request $request, $id)
     {
         // Find the record by ID
-        $mtssOSTC = Details::findOrFail($id);
+        $mtssOSTC = MtsrStatus::findOrFail($id);
 
         // Validate incoming request data
         $request->validate([

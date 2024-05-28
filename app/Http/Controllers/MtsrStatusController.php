@@ -14,6 +14,7 @@ class MtsrStatusController extends Controller
         $request->validate([
             'id_reference' => 'required',
             'mtsr' => 'required',
+            'overallstatus' => 'required',
         ]);
 
         // Create a new mtsr model instance and fill it with request data
@@ -38,6 +39,7 @@ public function update(Request $request)
         $validatedData = $request->validate([
             'id_reference' => 'required',
             'mtsr' => 'nullable',
+            'overallstatus' => 'nullable',
         ]);
         // Convert empty strings to NULL
         foreach ($validatedData as $key => $value) {
@@ -62,6 +64,7 @@ public function update(Request $request)
         $validatedData = $request->validate([
             'id_reference' => 'required',
             'mtsr' => 'nullable',
+            'overallstatus' => 'nullable',
         ]);
         // Convert empty strings to NULL
         foreach ($validatedData as $key => $value) {
