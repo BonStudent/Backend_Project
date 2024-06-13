@@ -99,3 +99,4 @@ Route::post('/update_mtsrstatus/{id_reference}/', [MtsrStatusController::class, 
 Route::post('/add_uploads', [UploadsController::class, 'create']);
 Route::post('/update_uploads/{id_reference}/', [UploadsController::class, 'update']);
 Route::post('/add_images', [ImagesController::class, 'store'])->name('images.store');
+Route::post('/update_images/{id_reference}/', [ImagesController::class, 'update']);

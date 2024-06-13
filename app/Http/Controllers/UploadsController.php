@@ -49,8 +49,7 @@ class UploadsController extends Controller
             'file10',
             'file11',
             'file12',
-            'file13'
-            ,
+            'file13',
             'file14',
             'file15',
             'file16',
@@ -112,14 +111,10 @@ class UploadsController extends Controller
         ], 201);
     }
 
-    public function update(Request $request, $id_reference)
+    public function update(Request $request)
     {
-        // Try to find the record by id_reference
-        $uploads = Uploads::where('id_reference', $id_reference)->first();
-
-        // Validate incoming request data
         $validatedData = $request->validate([
-            // 'id_reference' => 'required|integer',
+            'id_reference' => 'required|integer',
             'file1.*' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file2.*' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'file3.*' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
@@ -142,51 +137,98 @@ class UploadsController extends Controller
             'file20.*' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        $fileKeys = ['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7', 'file8', 'file9', 'file10', 'file11', 'file12', 'file13', 'file14', 'file15', 'file16', 'file17', 'file18', 'file19', 'file20'];
-        $filePaths = [];
+        $id_reference = $validatedData['id_reference'];
+
+        // $upload = Uploads::where('id_reference', $id_reference)->firstOrNew(); // Retrieve the upload record
+        $upload = Uploads::firstOrNew(['id_reference' => $id_reference]);
+
+        $fileKeys = [
+            'file1',
+            'file2',
+            'file3',
+            'file4',
+            'file5',
+            'file6',
+            'file7',
+            'file8',
+            'file9',
+            'file10',
+            'file11',
+            'file12',
+            'file13',
+            'file14',
+            'file15',
+            'file16',
+            'file17',
+            'file18',
+            'file19',
+            'file20'
+        ];
+
+        $newFiles = [];
 
         foreach ($fileKeys as $fileKey) {
             if ($request->hasFile($fileKey)) {
-                $filePaths[$fileKey] = [];
                 foreach ($request->file($fileKey) as $file) {
-                    $fileExtension = $file->getClientOriginalExtension();
-                    $fileName = Str::uuid(). '.'. $fileExtension; // Generate UUID for file name
-                    $filePath = $file->storeAs('public/uploads/'. $fileKey, $fileName);
-                    $filePaths[$fileKey][] = $filePath;
+                    // Use getClientOriginalName to get the original file name
+                    $originalName = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    // Construct the path including the original name and extension
+                    $path = "public/uploads/{$fileKey}/{$originalName}";
+                    // Store the file with its original name
+                    $file->storeAs("public/uploads/{$fileKey}", $originalName, 'public');
+
+                    // Store only the original file name
+                    $newFiles[$fileKey][] = $originalName;
+
+                    // Delete old file if exists
+                    if (isset($upload->$fileKey)) {
+                        $oldFilePaths = json_decode($upload->$fileKey, true);
+                        foreach ($oldFilePaths as $oldPath) {
+                            Storage::delete($oldPath);
+                        }
+                        unset($upload->$fileKey); // Remove old file path from model
+                    }
                 }
-                \Log::info('Stored file paths for '. $fileKey. ': '. json_encode($filePaths[$fileKey]));
             } else {
-                $filePaths[$fileKey] = [];
+                // No new files, just clean up old ones
+                if (isset($upload->$fileKey)) {
+                    $oldFilePaths = json_decode($upload->$fileKey, true);
+                    foreach ($oldFilePaths as $oldPath) {
+                        Storage::delete($oldPath);
+                    }
+                    unset($upload->$fileKey); // Remove old file path from model
+                }
             }
         }
-        
-        if ($uploads) {
-            // Save the file paths in the database
-            foreach ($fileKeys as $fileKey) {
-                $uploads->$fileKey = $filePaths[$fileKey]; // Removed manual JSON encoding
-            }
-            $uploads->save();
-        
-            // Update the recommendation with the new data
-            $uploads->update($validatedData);
-        
-            return response()->json(['message' => 'Record updated successfully'], 200);
+
+        $newUpload = new Uploads;
+
+        // Update the model with new file paths
+        foreach ($newFiles as $fileKey => $paths) {
+            $upload->$fileKey = json_encode(array_values($paths));
+            $newUpload->$fileKey = json_encode(array_values($paths));
+        }
+        // Before saving, ensure the upload has been modified
+        if (!$upload->isDirty()) {
+            // Optionally, handle the case where no changes were made
+            return response()->json([
+                'message' => 'No changes detected.',
+            ], 304);
+        }
+
+        // $upload->save();
+        if (!$upload) {
+            $newUpload->save();
         } else {
-            // Create a new recommendation instance
-            $newUploads = new Uploads();
-        
-            // Fill the new recommendation with the validated data
-            $newUploads->fill($validatedData);
-        
-            // Save the file paths in the database
-            foreach ($fileKeys as $fileKey) {
-                $newUploads->$fileKey = $filePaths[$fileKey]; // Removed manual JSON encoding
-            }
-        
-            // Save the new recommendation
-            $newUploads->save();
-        
-            return response()->json(['message' => 'New record created successfully'], 200);
+            $upload->save();
         }
-}
+
+        return response()->json([
+            'message' => 'Update successful',
+            'updated_files' => $newFiles,
+        ], 200);
+    }
+
+
 }

@@ -13,8 +13,8 @@ class MtsrStatusController extends Controller
         // Validate incoming request data
         $request->validate([
             'id_reference' => 'required',
-            'mtsr' => 'required',
-            'overallstatus' => 'required',
+            'mtsr' => 'nullable',
+            'overallstatus' => 'nullable',
         ]);
 
         // Create a new mtsr model instance and fill it with request data

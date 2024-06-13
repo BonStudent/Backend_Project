@@ -30,9 +30,10 @@ class VerifyCsrfToken extends Middleware
         '/update_mtsrstatus/*',
         '/get_files/', 
         '/add_uploads/',
-        // '/add_multiple_uploads/',
         '/update_uploads/*',
         '/add_images',
+        '/update_images/*',
+        '/get_images/',
         
     ];
 }

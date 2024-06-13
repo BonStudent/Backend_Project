@@ -15,6 +15,7 @@ class Details extends Model
         'tenement_number',
         'tenement_name',
         'area_hectares',
+        'date_filed',
         'barangay',
         'city',
         'province',
