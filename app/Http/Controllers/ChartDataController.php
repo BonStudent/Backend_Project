@@ -10,40 +10,35 @@ class ChartDataController extends Controller
 {
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'year' => 'required|string',
-            'barData' => 'required|string',
-            'pieData' => 'required|string',
-        ]);
-
-        Log::info('Update request received', $validated);
-
+        $data = $request->only(['year', 'barData', 'pieData']);
+        
         try {
-            $chartData = ChartData::updateOrCreate(
-                ['year' => $validated['year']],
-                [
-                    'bar_data' => $validated['barData'],
-                    'pie_data' => $validated['pieData']
-                ]
-            );
+            $chartData = ChartData::where('year', $data['year'])->first();
 
-            Log::info('Chart data updated', ['chartData' => $chartData]);
+            if (!$chartData) {
+                $chartData = new ChartData();
+                $chartData->year = $data['year'];
+            }
+
+            $chartData->bar_data = $data['barData'];
+            $chartData->pie_data = $data['pieData'];
+            $chartData->save();
 
             return response()->json(['message' => 'Chart data updated successfully']);
         } catch (\Exception $e) {
-            Log::error('Failed to update chart data', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to update chart data'], 500);
+            Log::error('Failed to update chart data: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to update chart data'], 500);
         }
     }
 
     public function fetch($year)
     {
-        Log::info('Fetch request received for year: ' . $year);
-
         try {
-            $chartData = ChartData::where('year', $year)->firstOrFail();
+            $chartData = ChartData::where('year', $year)->first();
 
-            Log::info('Chart data fetched', ['chartData' => $chartData]);
+            if (!$chartData) {
+                return response()->json(['message' => 'Chart data not found for year ' . $year], 404);
+            }
 
             return response()->json([
                 'year' => $chartData->year,
@@ -51,28 +46,28 @@ class ChartDataController extends Controller
                 'pieData' => explode(',', $chartData->pie_data),
             ]);
         } catch (\Exception $e) {
-            Log::error('Chart data not found', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Chart data not found'], 404);
+            Log::error('Failed to fetch chart data: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to fetch chart data'], 500);
         }
     }
 
     public function fetchLatest()
     {
-        Log::info('Fetch latest request received');
-
         try {
-            $chartData = ChartData::orderBy('year', 'desc')->firstOrFail();
+            $latestData = ChartData::latest()->first();
 
-            Log::info('Latest chart data fetched', ['chartData' => $chartData]);
+            if (!$latestData) {
+                return response()->json(['message' => 'No chart data found'], 404);
+            }
 
             return response()->json([
-                'year' => $chartData->year,
-                'barData' => explode(',', $chartData->bar_data),
-                'pieData' => explode(',', $chartData->pie_data),
+                'year' => $latestData->year,
+                'barData' => explode(',', $latestData->bar_data),
+                'pieData' => explode(',', $latestData->pie_data),
             ]);
         } catch (\Exception $e) {
-            Log::error('Chart data not found', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Chart data not found'], 404);
+            Log::error('Failed to fetch latest chart data: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to fetch latest chart data'], 500);
         }
     }
 }

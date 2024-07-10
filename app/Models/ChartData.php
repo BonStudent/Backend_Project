@@ -9,7 +9,7 @@ class ChartData extends Model
 {
     use HasFactory;
 
-    protected $table = 'chart_data'; // Explicitly define the table name
+    protected $table = 'chart_data';
 
     protected $fillable = ['year', 'bar_data', 'pie_data'];
 }
