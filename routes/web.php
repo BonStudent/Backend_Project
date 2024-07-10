@@ -8,6 +8,7 @@ use App\Models\Recommendation;
 use App\Models\MtsrStatus;
 use App\Models\Uploads;
 use App\Models\Images;
+use App\Models\ChartData;
 
 use App\Http\Controllers\DetailsController;
 use App\Http\Controllers\AccountsController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\MtsrStatusController;
 use App\Http\Controllers\UploadsController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\ChartDataController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -84,7 +86,6 @@ Route::get('/get_images', function () {
     // Example: Return the retrieved records as JSON
     return response()->json($accounts);
 });
-
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
