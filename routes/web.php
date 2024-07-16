@@ -18,6 +18,7 @@ use App\Http\Controllers\UploadsController;
 use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\CSAGController; //csag
 use App\Http\Controllers\ISAGController; //isag
+use App\Http\Controllers\QUARRYController; //quarry
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,6 +94,9 @@ Route::post('/api/csag', [CSAGController::class, 'store']);
 //isag
 Route::get('/api/isag', [ISAGController::class, 'index']);
 Route::post('/api/isag', [ISAGController::class, 'store']);
+//quarry
+Route::get('/api/quarry', [QUARRYController::class, 'index']);
+Route::post('/api/quarry', [QUARRYController::class, 'store']);
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
