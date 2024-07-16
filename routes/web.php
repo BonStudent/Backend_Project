@@ -16,6 +16,7 @@ use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\MtsrStatusController;
 use App\Http\Controllers\UploadsController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\CSAGController; //csag
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -84,6 +85,10 @@ Route::get('/get_images', function () {
     // Example: Return the retrieved records as JSON
     return response()->json($accounts);
 });
+
+//csag
+Route::get('/api/csag', [CSAGController::class, 'index']);
+Route::post('/api/csag', [CSAGController::class, 'store']);
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
