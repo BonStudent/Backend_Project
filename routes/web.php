@@ -19,6 +19,8 @@ use App\Http\Controllers\ImagesController;
 use App\Http\Controllers\CSAGController; //csag
 use App\Http\Controllers\ISAGController; //isag
 use App\Http\Controllers\QUARRYController; //quarry
+use App\Http\Controllers\MOEPController; //moep
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -97,6 +99,10 @@ Route::post('/api/isag', [ISAGController::class, 'store']);
 //quarry
 Route::get('/api/quarry', [QUARRYController::class, 'index']);
 Route::post('/api/quarry', [QUARRYController::class, 'store']);
+
+//moep
+Route::get('/api/MOEP', [MOEPController::class, 'index']);
+Route::post('/api/MOEP', [MOEPController::class, 'store']);
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
