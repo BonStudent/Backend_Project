@@ -9,8 +9,10 @@ class MOEP extends Model
 {
     use HasFactory;
 
+    protected $table = 'm_o_e_p_s';
+
     protected $fillable = [
-        'applicant',
+        'name',
         'moep_no',
         'permit_no',
         'issued',
