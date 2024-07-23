@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('MOEP', function (Blueprint $table) {
             $table->id();
-            $table->string('applicant');
+            $table->string('name');
             $table->string('moep_no');
             $table->string('permit_no');
             $table->date('issued');
