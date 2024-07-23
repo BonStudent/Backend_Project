@@ -1,3 +1,5 @@
+<!-- MOEP.php -->
+
 <?php
 
 namespace App\Models;
@@ -12,7 +14,7 @@ class MOEP extends Model
     protected $table = 'm_o_e_p_s';
 
     protected $fillable = [
-        'name',
+        'applicant',
         'moep_no',
         'permit_no',
         'issued',

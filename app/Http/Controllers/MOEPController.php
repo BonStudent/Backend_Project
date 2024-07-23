@@ -1,3 +1,4 @@
+<!-- MOEPController.php -->
 <?php
 
 namespace App\Http\Controllers;
@@ -16,7 +17,7 @@ class MOEPController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'applicant' => 'required|string|max:255',
             'moep_no' => 'required|string|max:255',
             'permit_no' => 'required|string|max:255',
             'issued' => 'required|date',
@@ -25,10 +26,10 @@ class MOEPController extends Controller
         ]);
 
         $file = $request->file('reportPDF');
-        $filePath = $file->store('public/reports');
+        $filePath = $file->store('public/MOEP');
 
         $MOEP = MOEP::create([
-            'name' => $request->name,
+            'applicant' => $request->applicant,
             'moep_no' => $request->moep_no,
             'permit_no' => $request->permit_no,
             'issued' => $request->issued,
