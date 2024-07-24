@@ -9,7 +9,7 @@ class monitoringOSTC extends Model
 {
     use HasFactory;
 
-    protected $table = 'monitoringostc';
+    protected $table = 'monitoring_ostc';
 
     protected $fillable = [
         'client',

@@ -21,6 +21,10 @@ use App\Http\Controllers\ISAGController; //isag
 use App\Http\Controllers\QUARRYController; //quarry
 use App\Http\Controllers\MOEPController; //moep
 use App\Http\Controllers\monitoringOSTCController; //ostc
+use App\Http\Controllers\monitoringInventoryController; //inventory
+use App\Http\Controllers\monitoringWPMController; //work program monitoring
+use App\Http\Controllers\monitoringMBController; //minahang bayan monitoring
+use App\Http\Controllers\monitoringInvestigationController; //investigation
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +112,23 @@ Route::post('/api/MOEP', [MOEPController::class, 'store']);
 //monitoringOSTC
 Route::get('/api/monitoringOSTC', [monitoringOSTCController::class, 'index']);
 Route::post('/api/monitoringOSTC', [monitoringOSTCController::class, 'store']);
+
+//monitoringInventory
+Route::get('/api/monitoringInventory', [monitoringInventoryController::class, 'index']);
+Route::post('/api/monitoringInventory', [monitoringInventoryController::class, 'store']);
+
+//monitoringWPM
+Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
+Route::post('/api/monitoringWPM', [monitoringWPMController::class, 'store']);
+
+//monitoringMB
+Route::get('/api/monitoringMB', [monitoringMBController::class, 'index']);
+Route::post('/api/monitoringMB', [monitoringMBController::class, 'store']);
+
+//monitoringInvestigation
+Route::get('/api/monitoringInvestigation', [monitoringInvestigationController::class, 'index']);
+Route::post('/api/monitoringInvestigation', [monitoringInvestigationController::class, 'store']);
+
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
