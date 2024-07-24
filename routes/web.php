@@ -20,6 +20,7 @@ use App\Http\Controllers\CSAGController; //csag
 use App\Http\Controllers\ISAGController; //isag
 use App\Http\Controllers\QUARRYController; //quarry
 use App\Http\Controllers\MOEPController; //moep
+use App\Http\Controllers\monitoringOSTCController; //ostc
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +104,10 @@ Route::post('/api/quarry', [QUARRYController::class, 'store']);
 //moep
 Route::get('/api/MOEP', [MOEPController::class, 'index']);
 Route::post('/api/MOEP', [MOEPController::class, 'store']);
+
+//monitoringOSTC
+Route::get('/api/monitoringOSTC', [monitoringOSTCController::class, 'index']);
+Route::post('/api/monitoringOSTC', [monitoringOSTCController::class, 'store']);
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
