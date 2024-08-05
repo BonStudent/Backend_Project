@@ -13,17 +13,27 @@ class monitoringOSTCController extends Controller
         $request->validate([
             'client' => 'required|string',
             'certification_no' => 'required|string',
-            'received_ord' => 'required|date',
-            'received_mmd' => 'required|date',
-            'payment_date' => 'required|date',
-            'sample_inspection' => 'required|string',
+            'received_ord' => 'nullable|date',
+            'received_mmd' => 'nullable|date',
+            'payment_date' => 'nullable|date',
+            'sample_inspection' => 'nullable|string',
             'issued' => 'required|date',
             'mmd_personnel' => 'required|string',
-            'MOVpdf' => 'required|mimes:pdf|max:5120',
+            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
         ]);
 
-        $file = $request->file('MOVpdf');
-        $filePath = $file->store('public/OSTC');
+        $filePath = null;
+
+        if ($request->hasFile('MOVpdf')) {
+            $file = $request->file('MOVpdf');
+            
+            // Check if the file is indeed a valid instance of UploadedFile
+            if ($file instanceof \Illuminate\Http\UploadedFile) {
+                $filePath = $file->store('public/OSTC');
+            } else {
+                return response()->json(['message' => 'Uploaded file is not valid'], 400);
+            }
+        }
 
         $monitoringOSTC = monitoringOSTC::create([
             'client' => $request->input('client'),
@@ -39,6 +49,7 @@ class monitoringOSTCController extends Controller
 
         return response()->json($monitoringOSTC);
     }
+
 
     public function index()
     {
