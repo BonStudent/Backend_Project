@@ -14,7 +14,9 @@ class monitoringInventory extends Model
     protected $fillable = [
         'month',
         'location',
-        'travel_date',
+        'travel_date_from',
+        'travel_date_to',
+        'report_date',
         'transmittal_date',
         'released_date',
         'mmd_personnel',

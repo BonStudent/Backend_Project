@@ -12,8 +12,10 @@ class monitoringWPM extends Model
     protected $table = 'monitoring_wpm';
 
     protected $fillable = [
+        'month',
         'text_field',
-        'travel_date',
+        'travel_date_from',
+        'travel_date_to',
         'report_date',
         'transmittal_date',
         'released_date',

@@ -16,8 +16,8 @@ class monitoringOSTCController extends Controller
             'received_ord' => 'nullable|date',
             'received_mmd' => 'nullable|date',
             'payment_date' => 'nullable|date',
-            'sample_inspection' => 'nullable|string',
-            'issued' => 'nullable|date',
+            'sample_inspection' => 'nullable|date',
+            'issued' => 'required|date',
             'mmd_personnel' => 'nullable|string',
             'MOVpdf' => 'nullable|mimes:pdf|max:5120',
         ]);
