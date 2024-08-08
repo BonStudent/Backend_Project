@@ -6,7 +6,7 @@ use App\Models\monitoringOSTC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class monitoringOSTCController extends Controller
+class MonitoringOSTCController extends Controller
 {
     public function store(Request $request)
     {
@@ -26,8 +26,6 @@ class monitoringOSTCController extends Controller
 
         if ($request->hasFile('MOVpdf')) {
             $file = $request->file('MOVpdf');
-            
-            // Check if the file is indeed a valid instance of UploadedFile
             if ($file instanceof \Illuminate\Http\UploadedFile) {
                 $filePath = $file->store('public/OSTC');
             } else {
@@ -49,7 +47,6 @@ class monitoringOSTCController extends Controller
 
         return response()->json($monitoringOSTC);
     }
-
 
     public function index()
     {

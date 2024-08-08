@@ -11,6 +11,8 @@ class monitoringOSTC extends Model
 
     protected $table = 'monitoring_ostc';
 
+    protected $primaryKey = 'no'; // Define the primary key column if it's not 'id'
+
     protected $fillable = [
         'client',
         'certification_no',

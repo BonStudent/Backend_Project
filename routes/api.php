@@ -12,7 +12,7 @@ Route::apiResource('csag', CSAGController::class);
 Route::apiResource('isag', ISAGController::class);
 Route::apiResource('quarry', QUARRYController::class);
 Route::apiResource('MOEP', MOEPController::class);
-Route::apiResource('monitoringOSTC', monitoringOSTCController::class); //MTSS Ore Sample Transport Certificate
+Route::apiResource('monitoringOSTC', monitoringOSTCController::class); //MTSS Ore Sample Transport Certificate (OSTC)
 Route::apiResource('monitoringInventory', monitoringInventoryController::class); //MTSS Inventory
 Route::apiResource('monitoringWPM', monitoringWPMController::class); //MTSS Work Program Monitoring
 Route::apiResource('monitoringMB', monitoringMBController::class); //MTSS Minahang Bayan Monitoring

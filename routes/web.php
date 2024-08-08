@@ -112,6 +112,7 @@ Route::post('/api/MOEP', [MOEPController::class, 'store']);
 //monitoringOSTC
 Route::get('/api/monitoringOSTC', [monitoringOSTCController::class, 'index']);
 Route::post('/api/monitoringOSTC', [monitoringOSTCController::class, 'store']);
+Route::put('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
 
 //monitoringInventory
 Route::get('/api/monitoringInventory', [monitoringInventoryController::class, 'index']);
