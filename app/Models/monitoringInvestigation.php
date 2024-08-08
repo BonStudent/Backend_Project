@@ -12,15 +12,16 @@ class monitoringInvestigation extends Model
     protected $table = 'monitoring_investigation';
 
     protected $fillable = [
+        'month',
         'text_field',
         'complaint_received',
-        'date_acted_from', //from-to
-        'date_acted_to',
+        'date_acted',
         'report_date',
         'transmittal_date',
         'released_date',
         'mmd_personnel',
         'remarks',
         'MOVpdf',
+        'coordinates',
     ];
 }
