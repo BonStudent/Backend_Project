@@ -11,7 +11,7 @@ class monitoringInventory extends Model
 
     protected $table = 'monitoring_inventory';
 
-    protected $primaryKey = 'ID';
+    protected $primaryKey = 'id_no';
 
     protected $fillable = [
         'month',

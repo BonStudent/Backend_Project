@@ -55,9 +55,9 @@ class monitoringInventoryController extends Controller
         return response()->json(monitoringInventory::all());
     }
 
-    public function destroy($id)
+    public function destroy($id_no)
     {
-        $inventory = monitoringInventory::find($id);
+        $inventory = monitoringInventory::find($id_no);
 
         if (!$inventory) {
             return response()->json(['message' => 'Entry not found'], 404);

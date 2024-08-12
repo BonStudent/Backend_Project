@@ -118,7 +118,8 @@ Route::delete('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'des
 //monitoringInventory
 Route::get('/api/monitoringInventory', [monitoringInventoryController::class, 'index']);
 Route::post('/api/monitoringInventory', [monitoringInventoryController::class, 'store']);
-Route::delete('/api/monitoringInventory/{id}', [monitoringInventoryController::class, 'destroy']);
+Route::put('/api/monitoringInventory/{id_no}', [monitoringInventoryController::class, 'update']);
+Route::delete('/api/monitoringInventory/{id_no}', [monitoringInventoryController::class, 'destroy']);
 
 //monitoringWPM
 Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
