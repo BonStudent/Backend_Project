@@ -7,6 +7,11 @@ use App\Http\Controllers\ISAGController;
 use App\Http\Controllers\QUARRYController;
 use App\Http\Controllers\MOEPController;
 use App\Http\Controllers\monitoringOSTCController;
+use App\Http\Controllers\monitoringInventoryController;
+use App\Http\Controllers\monitoringWPMController;
+use App\Http\Controllers\monitoringMBController;
+use App\Http\Controllers\monitoringInvestigationController;
+
 
 Route::apiResource('csag', CSAGController::class);
 Route::apiResource('isag', ISAGController::class);

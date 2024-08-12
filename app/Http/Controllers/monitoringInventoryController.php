@@ -54,4 +54,22 @@ class monitoringInventoryController extends Controller
     {
         return response()->json(monitoringInventory::all());
     }
+
+    public function destroy($id)
+    {
+        $inventory = monitoringInventory::find($id);
+
+        if (!$inventory) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+
+        // Delete the file if it exists
+        if ($inventory->MOVpdf) {
+            Storage::delete($inventory->MOVpdf);
+        }
+
+        $inventory->delete();
+
+        return response()->json(['message' => 'Entry deleted successfully']);
+    }
 }

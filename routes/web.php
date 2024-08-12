@@ -112,12 +112,13 @@ Route::post('/api/MOEP', [MOEPController::class, 'store']);
 //monitoringOSTC
 Route::get('/api/monitoringOSTC', [monitoringOSTCController::class, 'index']);
 Route::post('/api/monitoringOSTC', [monitoringOSTCController::class, 'store']);
-Route::put('/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
+Route::put('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
 Route::delete('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'destroy']);
 
 //monitoringInventory
 Route::get('/api/monitoringInventory', [monitoringInventoryController::class, 'index']);
 Route::post('/api/monitoringInventory', [monitoringInventoryController::class, 'store']);
+Route::delete('/api/monitoringInventory/{id}', [monitoringInventoryController::class, 'destroy']);
 
 //monitoringWPM
 Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
