@@ -23,7 +23,7 @@ use App\Http\Controllers\MOEPController; //moep
 use App\Http\Controllers\MonitoringOSTCController; //ostc
 use App\Http\Controllers\MonitoringInventoryController; //inventory
 use App\Http\Controllers\monitoringWPMController; //work program monitoring
-use App\Http\Controllers\monitoringMBController; //minahang bayan monitoring
+use App\Http\Controllers\MonitoringMBController; //minahang bayan monitoring
 use App\Http\Controllers\monitoringInvestigationController; //investigation
 
 /*
@@ -125,9 +125,9 @@ Route::delete('/api/MonitoringInventory/{ID}', [MonitoringInventoryController::c
 Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
 Route::post('/api/monitoringWPM', [monitoringWPMController::class, 'store']);
 
-//monitoringMB
-Route::get('/api/monitoringMB', [monitoringMBController::class, 'index']);
-Route::post('/api/monitoringMB', [monitoringMBController::class, 'store']);
+//MonitoringMB
+Route::get('/api/MonitoringMB', [MonitoringMBController::class, 'index']);
+Route::post('/api/MonitoringMB', [MonitoringMBController::class, 'store']);
 
 //monitoringInvestigation
 Route::get('/api/monitoringInvestigation', [monitoringInvestigationController::class, 'index']);

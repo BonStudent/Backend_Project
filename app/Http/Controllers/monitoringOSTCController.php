@@ -32,7 +32,7 @@ class MonitoringOSTCController extends Controller
             if ($request->hasFile('MOVpdf')) {
                 $file = $request->file('MOVpdf');
                 if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    $filePath = $file->store('public/OSTC');
+                    $filePath = $file->move(public_path('public/OSTC'), $file->getClientOriginalName());
                 } else {
                     return response()->json(['message' => 'Uploaded file is not valid'], 400);
                 }

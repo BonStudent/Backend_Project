@@ -95,42 +95,45 @@ class MonitoringInventoryController extends Controller
             'mmd_personnel' => 'nullable|string',
             'MOVpdf' => 'nullable|mimes:pdf|max:5120',
         ]);
-
+    
         $MonitoringInventory = MonitoringInventory::find($ID);
-
+    
         if (!$MonitoringInventory) {
             return response()->json(['message' => 'Entry not found'], 404);
         }
-
+    
         DB::beginTransaction();
-
+    
         try {
-            $filePath = $MonitoringInventory->MOVpdf;
-
+            // Handle the file upload
             if ($request->hasFile('MOVpdf')) {
                 $file = $request->file('MOVpdf');
                 if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    if ($filePath) {
-                        Storage::delete($filePath);
+                    // Delete the old file if it exists
+                    if ($MonitoringInventory->MOVpdf) {
+                        Storage::delete($MonitoringInventory->MOVpdf);
                     }
+                    // Store the new file and update the filePath variable
                     $filePath = $file->store('public/Inventory');
+                    $MonitoringInventory->MOVpdf = $filePath;
                 } else {
                     return response()->json(['message' => 'Uploaded file is not valid'], 400);
                 }
             }
-
-            $MonitoringInventory->update([
-                'month' => $request->input('month'),
-                'location' => $request->input('location'),
-                'travel_date_from' => $request->input('travel_date_from'),
-                'travel_date_to' => $request->input('travel_date_to'),
-                'report_date' => $request->input('report_date'),
-                'transmittal_date' => $request->input('transmittal_date'),
-                'released_date' => $request->input('released_date'),
-                'mmd_personnel' => $request->input('mmd_personnel'),
-                'MOVpdf' => $filePath,
-            ]);
-
+    
+            // Update the other fields
+            $MonitoringInventory->month = $request->input('month');
+            $MonitoringInventory->location = $request->input('location');
+            $MonitoringInventory->travel_date_from = $request->input('travel_date_from');
+            $MonitoringInventory->travel_date_to = $request->input('travel_date_to');
+            $MonitoringInventory->report_date = $request->input('report_date');
+            $MonitoringInventory->transmittal_date = $request->input('transmittal_date');
+            $MonitoringInventory->released_date = $request->input('released_date');
+            $MonitoringInventory->mmd_personnel = $request->input('mmd_personnel');
+    
+            // Save the changes
+            $MonitoringInventory->save();
+    
             DB::commit();
             return response()->json($MonitoringInventory);
         } catch (Exception $e) {

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\monitoringMB;
+use App\Models\MonitoringMB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class monitoringMBController extends Controller
+class MonitoringMBController extends Controller
 {
     public function store(Request $request)
     {
@@ -37,7 +37,7 @@ class monitoringMBController extends Controller
             $filePath_b = $file_b->store('public/Minahang_Bayan_Monitoring');
         }
 
-        $monitoringMB = monitoringMB::create([
+        $MonitoringMB = MonitoringMB::create([
             'month' => $request->input('month'),
             'petitioner' => $request->input('petitioner'),
             'location' => $request->input('location'),
@@ -51,11 +51,11 @@ class monitoringMBController extends Controller
             'map' => $filePath_b,
         ]);
 
-        return response()->json($monitoringMB, 201);
+        return response()->json($MonitoringMB, 201);
     }
 
     public function index()
     {
-        return response()->json(monitoringMB::all(), 200);
+        return response()->json(MonitoringMB::all(), 200);
     }
 }
