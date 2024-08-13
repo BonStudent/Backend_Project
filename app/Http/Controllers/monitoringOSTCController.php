@@ -6,13 +6,21 @@ use App\Models\MonitoringOSTC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str; // Add this for generating random strings
 use Exception;
 
 class MonitoringOSTCController extends Controller
 {
+    /**
+     * Store a newly created MonitoringOSTC entry in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request data
+        $validatedData = $request->validate([
             'client' => 'required|string',
             'certification_no' => 'required|string',
             'received_ord' => 'nullable|date',
@@ -24,45 +32,38 @@ class MonitoringOSTCController extends Controller
             'MOVpdf' => 'nullable|mimes:pdf|max:5120', // Ensure the file is a PDF and max size is 5MB
         ]);
 
-        DB::beginTransaction();
+        // Initialize the file path variable
+        $filePath = null;
 
-        try {
-            $filePath = null;
-
-            if ($request->hasFile('MOVpdf')) {
-                $file = $request->file('MOVpdf');
-                if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    $filePath = $file->move(public_path('public/OSTC'), $file->getClientOriginalName());
-                } else {
-                    return response()->json(['message' => 'Uploaded file is not valid'], 400);
-                }
-            }
-
-            $MonitoringOSTC = MonitoringOSTC::create([
-                'client' => $request->input('client'),
-                'certification_no' => $request->input('certification_no'),
-                'received_ord' => $request->input('received_ord'),
-                'received_mmd' => $request->input('received_mmd'),
-                'payment_date' => $request->input('payment_date'),
-                'sample_inspection' => $request->input('sample_inspection'),
-                'issued' => $request->input('issued'),
-                'mmd_personnel' => $request->input('mmd_personnel'),
-                'MOVpdf' => $filePath,
-            ]);
-
-            DB::commit();
-            return response()->json($MonitoringOSTC, 201);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'Failed to store entry'], 500);
+        // Check if the request contains a file named 'MOVpdf'
+        if ($request->hasFile('MOVpdf')) {
+            $file = $request->file('MOVpdf');
+            $filePath = $file->store('OSTC', 'public');
         }
+
+        // Create a new MonitoringOSTC entry with the validated data
+        $MonitoringOSTC = MonitoringOSTC::create(array_merge($validatedData, ['MOVpdf' => $filePath]));
+
+        // Return the newly created entry as a JSON response
+        return response()->json($MonitoringOSTC);
     }
 
+    /**
+     * Display a listing of the MonitoringOSTC entries.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         return response()->json(MonitoringOSTC::all());
     }
 
+    /**
+     * Remove the specified MonitoringOSTC entry from storage.
+     *
+     * @param  int  $no
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($no)
     {
         $MonitoringOSTC = MonitoringOSTC::find($no);
@@ -79,67 +80,16 @@ class MonitoringOSTCController extends Controller
             $MonitoringOSTC->delete();
             return response()->json(['message' => 'Entry deleted successfully']);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Failed to delete entry'], 500);
+            return response()->json(['message' => 'Failed to delete entry', 'error' => $e->getMessage()], 500);
         }
     }
 
-    public function update(Request $request, $no)
-    {
-        $request->validate([
-            'client' => 'required|string',
-            'certification_no' => 'required|string',
-            'received_ord' => 'nullable|date',
-            'received_mmd' => 'nullable|date',
-            'payment_date' => 'nullable|date',
-            'sample_inspection' => 'nullable|date',
-            'issued' => 'required|date',
-            'mmd_personnel' => 'nullable|string',
-            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
-        ]);
-
-        $MonitoringOSTC = MonitoringOSTC::find($no);
-
-        if (!$MonitoringOSTC) {
-            return response()->json(['message' => 'Entry not found'], 404);
-        }
-
-        DB::beginTransaction();
-
-        try {
-            $filePath = $MonitoringOSTC->MOVpdf;
-
-            if ($request->hasFile('MOVpdf')) {
-                $file = $request->file('MOVpdf');
-                if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    if ($filePath) {
-                        Storage::delete($filePath);
-                    }
-                    $filePath = $file->store('public/OSTC');
-                } else {
-                    return response()->json(['message' => 'Uploaded file is not valid'], 400);
-                }
-            }
-
-            $MonitoringOSTC->update([
-                'client' => $request->input('client'),
-                'certification_no' => $request->input('certification_no'),
-                'received_ord' => $request->input('received_ord'),
-                'received_mmd' => $request->input('received_mmd'),
-                'payment_date' => $request->input('payment_date'),
-                'sample_inspection' => $request->input('sample_inspection'),
-                'issued' => $request->input('issued'),
-                'mmd_personnel' => $request->input('mmd_personnel'),
-                'MOVpdf' => $filePath,
-            ]);
-
-            DB::commit();
-            return response()->json($MonitoringOSTC);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'Failed to update entry'], 500);
-        }
-    }
-
+    /**
+     * Display the specified MonitoringOSTC entry.
+     *
+     * @param  int  $no
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($no)
     {
         $data = MonitoringOSTC::find($no);
@@ -148,5 +98,53 @@ class MonitoringOSTCController extends Controller
         } else {
             return response()->json(['error' => 'Not found'], 404);
         }
+    }
+
+    /**
+     * Update the specified MonitoringOSTC entry in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $no
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $no)
+    {
+        // Find the MonitoringOSTC entry by ID
+        $MonitoringOSTC = MonitoringOSTC::find($no);
+
+        if (!$MonitoringOSTC) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'client' => 'required|string',
+            'certification_no' => 'required|string',
+            'received_ord' => 'nullable|date',
+            'received_mmd' => 'nullable|date',
+            'payment_date' => 'nullable|date',
+            'sample_inspection' => 'nullable|date',
+            'issued' => 'required|date',
+            'mmd_personnel' => 'nullable|string',
+            'MOVpdf' => 'nullable|mimes:pdf|max:5120', // Ensure the file is a PDF and max size is 5MB
+        ]);
+
+        // Handle file upload if present
+        if ($request->hasFile('MOVpdf')) {
+            // Delete the old file if it exists
+            if ($MonitoringOSTC->MOVpdf) {
+                Storage::delete($MonitoringOSTC->MOVpdf);
+            }
+
+            // Store the new file
+            $filePath = $request->file('MOVpdf')->store('/OSTC');
+            $validatedData['MOVpdf'] = $filePath;
+        }
+
+        // Update the MonitoringOSTC entry with the validated data
+        $MonitoringOSTC->update($validatedData);
+
+        // Return the updated entry as a JSON response
+        return response()->json($MonitoringOSTC);
     }
 }
