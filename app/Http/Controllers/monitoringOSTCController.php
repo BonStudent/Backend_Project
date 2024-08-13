@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\monitoringOSTC;
+use App\Models\MonitoringOSTC;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +33,7 @@ class MonitoringOSTCController extends Controller
             }
         }
 
-        $monitoringOSTC = monitoringOSTC::create([
+        $MonitoringOSTC = MonitoringOSTC::create([
             'client' => $request->input('client'),
             'certification_no' => $request->input('certification_no'),
             'received_ord' => $request->input('received_ord'),
@@ -45,30 +45,30 @@ class MonitoringOSTCController extends Controller
             'MOVpdf' => $filePath,
         ]);
 
-        return response()->json($monitoringOSTC);
+        return response()->json($MonitoringOSTC);
     }
 
     public function index()
     {
-        return response()->json(monitoringOSTC::all());
+        return response()->json(MonitoringOSTC::all());
     }
 
     public function destroy($no)
     {
         // Find the entry by its ID
-        $monitoringOSTC = monitoringOSTC::find($no);
+        $MonitoringOSTC = MonitoringOSTC::find($no);
 
-        if (!$monitoringOSTC) {
+        if (!$MonitoringOSTC) {
             return response()->json(['message' => 'Entry not found'], 404);
         }
 
         // Delete the associated file if it exists
-        if ($monitoringOSTC->MOVpdf) {
-            Storage::delete($monitoringOSTC->MOVpdf);
+        if ($MonitoringOSTC->MOVpdf) {
+            Storage::delete($MonitoringOSTC->MOVpdf);
         }
 
         // Delete the entry from the database
-        $monitoringOSTC->delete();
+        $MonitoringOSTC->delete();
 
         return response()->json(['message' => 'Entry deleted successfully']);
     }
@@ -78,14 +78,14 @@ class MonitoringOSTCController extends Controller
     public function update(Request $request, $no)
     {
         // Find the entry by its ID
-        $monitoringOSTC = monitoringOSTC::find($no);
+        $MonitoringOSTC = MonitoringOSTC::find($no);
     
-        if (!$monitoringOSTC) {
+        if (!$MonitoringOSTC) {
             return response()->json(['message' => 'Entry not found'], 404);
         }
     
         // Handle the file upload
-        $filePath = $monitoringOSTC->MOVpdf;
+        $filePath = $MonitoringOSTC->MOVpdf;
     
         if ($request->hasFile('MOVpdf')) {
             $file = $request->file('MOVpdf');
@@ -101,7 +101,7 @@ class MonitoringOSTCController extends Controller
         }
     
         // Update the entry
-        $monitoringOSTC->update([
+        $MonitoringOSTC->update([
             'client' => $request->input('client'),
             'certification_no' => $request->input('certification_no'),
             'received_ord' => $request->input('received_ord'),
@@ -113,7 +113,7 @@ class MonitoringOSTCController extends Controller
             'MOVpdf' => $filePath,
         ]);
     
-        return response()->json($monitoringOSTC);
+        return response()->json($MonitoringOSTC);
     }
 
     public function show($no)

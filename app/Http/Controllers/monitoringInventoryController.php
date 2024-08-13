@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\monitoringInventory;
+use App\Models\MonitoringInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class monitoringInventoryController extends Controller
+class MonitoringInventoryController extends Controller
 {
     public function store(Request $request)
     {
@@ -35,7 +35,7 @@ class monitoringInventoryController extends Controller
             }
         }
 
-        $monitoringInventory = monitoringInventory::create([
+        $MonitoringInventory = MonitoringInventory::create([
             'month' => $request->input('month'),
             'location' => $request->input('location'),
             'travel_date_from' => $request->input('travel_date_from'),
@@ -47,19 +47,25 @@ class monitoringInventoryController extends Controller
             'MOVpdf' => $filePath,
         ]);
 
-        return response()->json($monitoringInventory);
+        return response()->json($MonitoringInventory);
     }
 
     public function index()
     {
-        return response()->json(monitoringInventory::all());
+        return response()->json(MonitoringInventory::all());
+
     }
-
-    public function destroy($id_no)
+    public function destroy($id)
     {
-        $inventory = monitoringInventory::find($id_no);
+        // Log the id being used
+        \Log::info('Attempting to delete inventory with id: ' . $id);
 
+        // Retrieve the inventory entry using the Query Builder
+        $inventory = \DB::table('monitoring_inventories')->where('id', $id)->first();
+
+        // Check if the inventory entry exists
         if (!$inventory) {
+            \Log::warning('No inventory found with id: ' . $id);
             return response()->json(['message' => 'Entry not found'], 404);
         }
 
@@ -68,8 +74,19 @@ class monitoringInventoryController extends Controller
             Storage::delete($inventory->MOVpdf);
         }
 
-        $inventory->delete();
+        // Delete the inventory entry
+        \DB::table('monitoring_inventories')->where('id', $id)->delete();
 
         return response()->json(['message' => 'Entry deleted successfully']);
+    }
+
+    public function show($id)
+    {
+        $data = MonitoringInventory::find($id);
+        if ($data) {
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Not found'], 404);
+        }
     }
 }

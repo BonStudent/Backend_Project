@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class monitoringInventory extends Model
+class MonitoringInventory extends Model
 {
     use HasFactory;
 
     protected $table = 'monitoring_inventory';
 
-    protected $primaryKey = 'id_no';
+    protected $primaryKey = 'id'; //primary key
 
     protected $fillable = [
         'month',

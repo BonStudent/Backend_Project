@@ -20,8 +20,8 @@ use App\Http\Controllers\CSAGController; //csag
 use App\Http\Controllers\ISAGController; //isag
 use App\Http\Controllers\QUARRYController; //quarry
 use App\Http\Controllers\MOEPController; //moep
-use App\Http\Controllers\monitoringOSTCController; //ostc
-use App\Http\Controllers\monitoringInventoryController; //inventory
+use App\Http\Controllers\MonitoringOSTCController; //ostc
+use App\Http\Controllers\MonitoringInventoryController; //inventory
 use App\Http\Controllers\monitoringWPMController; //work program monitoring
 use App\Http\Controllers\monitoringMBController; //minahang bayan monitoring
 use App\Http\Controllers\monitoringInvestigationController; //investigation
@@ -109,17 +109,17 @@ Route::post('/api/quarry', [QUARRYController::class, 'store']);
 Route::get('/api/MOEP', [MOEPController::class, 'index']);
 Route::post('/api/MOEP', [MOEPController::class, 'store']);
 
-//monitoringOSTC
-Route::get('/api/monitoringOSTC', [monitoringOSTCController::class, 'index']);
-Route::post('/api/monitoringOSTC', [monitoringOSTCController::class, 'store']);
-Route::put('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
-Route::delete('/api/monitoringOSTC/{no}', [MonitoringOSTCController::class, 'destroy']);
+//MonitoringOSTC
+Route::get('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'index']);
+Route::post('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'store']);
+Route::put('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
+Route::delete('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'destroy']);
 
-//monitoringInventory
-Route::get('/api/monitoringInventory', [monitoringInventoryController::class, 'index']);
-Route::post('/api/monitoringInventory', [monitoringInventoryController::class, 'store']);
-Route::put('/api/monitoringInventory/{id_no}', [monitoringInventoryController::class, 'update']);
-Route::delete('/api/monitoringInventory/{id_no}', [monitoringInventoryController::class, 'destroy']);
+//MonitoringInventory
+Route::get('/api/MonitoringInventory', [MonitoringInventoryController::class, 'index']);
+Route::post('/api/MonitoringInventory', [MonitoringInventoryController::class, 'store']);
+Route::put('/api/MonitoringInventory/{id}', [MonitoringInventoryController::class, 'update']);
+Route::delete('/api/MonitoringInventory/{id}', [MonitoringInventoryController::class, 'destroy']);
 
 //monitoringWPM
 Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
