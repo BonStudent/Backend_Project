@@ -55,17 +55,17 @@ class MonitoringInventoryController extends Controller
         return response()->json(MonitoringInventory::all());
 
     }
-    public function destroy($id)
+    public function destroy($ID)
     {
         // Log the id being used
-        \Log::info('Attempting to delete inventory with id: ' . $id);
+        \Log::info('Attempting to delete inventory with id: ' . $ID);
 
         // Retrieve the inventory entry using the Query Builder
-        $inventory = \DB::table('monitoring_inventories')->where('id', $id)->first();
+        $inventory = \DB::table('monitoring_inventory')->where('ID', $ID)->first();
 
         // Check if the inventory entry exists
         if (!$inventory) {
-            \Log::warning('No inventory found with id: ' . $id);
+            \Log::warning('No inventory found with ID: ' . $ID);
             return response()->json(['message' => 'Entry not found'], 404);
         }
 
@@ -75,14 +75,14 @@ class MonitoringInventoryController extends Controller
         }
 
         // Delete the inventory entry
-        \DB::table('monitoring_inventories')->where('id', $id)->delete();
+        \DB::table('monitoring_inventory')->where('ID', $ID)->delete();
 
         return response()->json(['message' => 'Entry deleted successfully']);
     }
 
-    public function show($id)
+    public function show($ID)
     {
-        $data = MonitoringInventory::find($id);
+        $data = MonitoringInventory::find($ID);
         if ($data) {
             return response()->json($data);
         } else {
