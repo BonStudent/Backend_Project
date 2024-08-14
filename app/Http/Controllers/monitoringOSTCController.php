@@ -33,7 +33,7 @@ class MonitoringOSTCController extends Controller
         ]);
 
         // Initialize the file path variable
-        $filePath = null;
+        $filePath = '';
 
         // Check if the request contains a file named 'MOVpdf'
         if ($request->hasFile('MOVpdf')) {
@@ -111,11 +111,11 @@ class MonitoringOSTCController extends Controller
     {
         // Find the MonitoringOSTC entry by ID
         $MonitoringOSTC = MonitoringOSTC::find($no);
-
+    
         if (!$MonitoringOSTC) {
             return response()->json(['message' => 'Entry not found'], 404);
         }
-
+    
         // Validate the incoming request data
         $validatedData = $request->validate([
             'client' => 'required|string',
@@ -128,22 +128,25 @@ class MonitoringOSTCController extends Controller
             'mmd_personnel' => 'nullable|string',
             'MOVpdf' => 'nullable|mimes:pdf|max:5120', // Ensure the file is a PDF and max size is 5MB
         ]);
-
+    
         // Handle file upload if present
         if ($request->hasFile('MOVpdf')) {
             // Delete the old file if it exists
             if ($MonitoringOSTC->MOVpdf) {
-                Storage::delete($MonitoringOSTC->MOVpdf);
+                Storage::disk('public')->delete($MonitoringOSTC->MOVpdf);
             }
-
+    
             // Store the new file
-            $filePath = $request->file('MOVpdf')->store('/OSTC');
+            $filePath = $request->file('MOVpdf')->store('OSTC', 'public');
             $validatedData['MOVpdf'] = $filePath;
+        } else {
+            // If no file is uploaded, ensure the existing file path remains unchanged
+            $validatedData['MOVpdf'] = $MonitoringOSTC->MOVpdf;
         }
-
+    
         // Update the MonitoringOSTC entry with the validated data
         $MonitoringOSTC->update($validatedData);
-
+    
         // Return the updated entry as a JSON response
         return response()->json($MonitoringOSTC);
     }

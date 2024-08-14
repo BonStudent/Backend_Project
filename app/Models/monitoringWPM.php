@@ -11,6 +11,8 @@ class MonitoringWPM extends Model
 
     protected $table = 'monitoring_wpm';
 
+    protected $primaryKey = 'ID'; //primary key
+
     protected $fillable = [
         'month',
         'text_field',
