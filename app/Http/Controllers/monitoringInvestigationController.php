@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\monitoringInvestigation;
+use App\Models\MonitoringInvestigation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class monitoringInvestigationController extends Controller
+class MonitoringInvestigationController extends Controller
 {
     public function store(Request $request)
     {
@@ -36,7 +36,7 @@ class monitoringInvestigationController extends Controller
             }
         }
 
-        $monitoringInvestigation = monitoringInvestigation::create([
+        $MonitoringInvestigation = MonitoringInvestigation::create([
             'month' => $request->input('month'),
             'text_field' => $request->input('text_field'),
             'complaint_received' => $request->input('complaint_received'),
@@ -50,11 +50,11 @@ class monitoringInvestigationController extends Controller
             'coordinates' => $request->input('coordinates'),
         ]);
 
-        return response()->json($monitoringInvestigation);
+        return response()->json($MonitoringInvestigation);
     }
 
     public function index()
     {
-        return response()->json(monitoringInvestigation::all());
+        return response()->json(MonitoringInvestigation::all());
     }
 }

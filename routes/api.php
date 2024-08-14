@@ -8,9 +8,9 @@ use App\Http\Controllers\QUARRYController;
 use App\Http\Controllers\MOEPController;
 use App\Http\Controllers\MonitoringOSTCController;
 use App\Http\Controllers\MonitoringInventoryController;
-use App\Http\Controllers\monitoringWPMController;
+use App\Http\Controllers\MonitoringWPMController;
 use App\Http\Controllers\MonitoringMBController;
-use App\Http\Controllers\monitoringInvestigationController;
+use App\Http\Controllers\MonitoringInvestigationController;
 
 
 Route::apiResource('csag', CSAGController::class);
@@ -19,9 +19,9 @@ Route::apiResource('quarry', QUARRYController::class);
 Route::apiResource('MOEP', MOEPController::class);
 Route::apiResource('MonitoringOSTC', MonitoringOSTCController::class); //MTSS Ore Sample Transport Certificate (OSTC)
 Route::apiResource('MonitoringInventory', MonitoringInventoryController::class); //MTSS Inventory
-Route::apiResource('monitoringWPM', monitoringWPMController::class); //MTSS Work Program Monitoring
+Route::apiResource('MonitoringWPM', MonitoringWPMController::class); //MTSS Work Program Monitoring
 Route::apiResource('MonitoringMB', MonitoringMBController::class); //MTSS Minahang Bayan Monitoring
-Route::apiResource('monitoringInvestigation', monitoringInvestigationController::class); //MTSS Investigation
+Route::apiResource('MonitoringInvestigation', MonitoringInvestigationController::class); //MTSS Investigation
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

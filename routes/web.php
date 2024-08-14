@@ -22,9 +22,9 @@ use App\Http\Controllers\QUARRYController; //quarry
 use App\Http\Controllers\MOEPController; //moep
 use App\Http\Controllers\MonitoringOSTCController; //ostc
 use App\Http\Controllers\MonitoringInventoryController; //inventory
-use App\Http\Controllers\monitoringWPMController; //work program monitoring
+use App\Http\Controllers\MonitoringWPMController; //work program monitoring
 use App\Http\Controllers\MonitoringMBController; //minahang bayan monitoring
-use App\Http\Controllers\monitoringInvestigationController; //investigation
+use App\Http\Controllers\MonitoringInvestigationController; //investigation
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +114,7 @@ Route::get('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'index']);
 Route::post('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'store']);
 Route::put('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
 Route::delete('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'destroy']);
+// Route::post('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'updateFile']);
 
 //MonitoringInventory
 Route::get('/api/MonitoringInventory', [MonitoringInventoryController::class, 'index']);
@@ -121,17 +122,23 @@ Route::post('/api/MonitoringInventory', [MonitoringInventoryController::class, '
 Route::put('/api/MonitoringInventory/{ID}', [MonitoringInventoryController::class, 'update']);
 Route::delete('/api/MonitoringInventory/{ID}', [MonitoringInventoryController::class, 'destroy']);
 
-//monitoringWPM
-Route::get('/api/monitoringWPM', [monitoringWPMController::class, 'index']);
-Route::post('/api/monitoringWPM', [monitoringWPMController::class, 'store']);
+//MonitoringWPM
+Route::get('/api/MonitoringWPM', [MonitoringWPMController::class, 'index']);
+Route::post('/api/MonitoringWPM', [MonitoringWPMController::class, 'store']);
+Route::get('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'update']);
+Route::post('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'destroy']);
 
 //MonitoringMB
 Route::get('/api/MonitoringMB', [MonitoringMBController::class, 'index']);
 Route::post('/api/MonitoringMB', [MonitoringMBController::class, 'store']);
+Route::get('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'update']);
+Route::post('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'destroy']);
 
-//monitoringInvestigation
-Route::get('/api/monitoringInvestigation', [monitoringInvestigationController::class, 'index']);
-Route::post('/api/monitoringInvestigation', [monitoringInvestigationController::class, 'store']);
+//MonitoringInvestigation
+Route::get('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'index']);
+Route::post('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'store']);
+Route::get('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
+Route::post('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'destroy']);
 
 
 Route::post('/add_details', [DetailsController::class, 'create']);

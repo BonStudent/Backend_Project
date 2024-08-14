@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\monitoringWPM;
+use App\Models\MonitoringWPM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class monitoringWPMController extends Controller
+class MonitoringWPMController extends Controller
 {
     public function store(Request $request)
     {
@@ -35,7 +35,7 @@ class monitoringWPMController extends Controller
             }
         }
 
-        $monitoringWPM = monitoringWPM::create([
+        $MonitoringWPM = MonitoringWPM::create([
             'month' => $request->input('month'),
             'text_field' => $request->input('text_field'),
             'travel_date_from' => $request->input('travel_date_from'),
@@ -47,11 +47,11 @@ class monitoringWPMController extends Controller
             'MOVpdf' => $filePath,
         ]);
 
-        return response()->json($monitoringWPM);
+        return response()->json($MonitoringWPM);
     }
 
     public function index()
     {
-        return response()->json(monitoringWPM::all());
+        return response()->json(MonitoringWPM::all());
     }
 }
