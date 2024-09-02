@@ -38,7 +38,7 @@ class MonitoringOSTCController extends Controller
         // Check if the request contains a file named 'MOVpdf'
         if ($request->hasFile('MOVpdf')) {
             $file = $request->file('MOVpdf');
-            $filePath = $file->store('OSTC', 'public');
+            $filePath = $file->store('public/OSTC');
         }
 
         // Create a new MonitoringOSTC entry with the validated data
