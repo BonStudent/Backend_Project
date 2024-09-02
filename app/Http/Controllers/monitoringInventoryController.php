@@ -52,39 +52,59 @@ class MonitoringInventoryController extends Controller
         return response()->json($MonitoringInventory);
     }
 
+    /**
+     * Display a listing of the MonitoringInventory entries.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         return response()->json(MonitoringInventory::all());
     }
 
-    public function destroy($ID)
+    /**
+     * Remove the specified MonitoringInventory entry from storage.
+     *
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
     {
-        // Log the id being used
-        \Log::info('Attempting to delete inventory with id: ' . $ID);
+        $MonitoringInventory = MonitoringInventory::find($id);
 
-        // Retrieve the inventory entry using the Query Builder
-        $inventory = \DB::table('monitoring_inventory')->where('ID', $ID)->first();
-
-        // Check if the inventory entry exists
-        if (!$inventory) {
-            \Log::warning('No inventory found with ID: ' . $ID);
+        if (!$MonitoringInventory) {
             return response()->json(['message' => 'Entry not found'], 404);
         }
 
-        // Delete the file if it exists
-        if ($inventory->MOVpdf) {
-            Storage::delete($inventory->MOVpdf);
+        try {
+            if ($MonitoringInventory->MOVpdf) {
+                Storage::delete($MonitoringInventory->MOVpdf);
+            }
+
+            $MonitoringInventory->delete();
+            return response()->json(['message' => 'Entry deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed to delete entry', 'error' => $e->getMessage()], 500);
         }
-
-        // Delete the inventory entry
-        \DB::table('monitoring_inventory')->where('ID', $ID)->delete();
-
-        return response()->json(['message' => 'Entry deleted successfully']);
     }
 
-    public function update(Request $request, $ID)
+    /**
+     * Update the specified MonitoringInventory entry in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        // Find the MonitoringInventory entry by id
+        $MonitoringInventory = MonitoringInventory::find($id);
+    
+        if (!$MonitoringInventory) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+
+        $validatedData = $request->validate([
             'month' => 'required|string',
             'location' => 'required|string',
             'travel_date_from' => 'nullable|date',
@@ -96,51 +116,26 @@ class MonitoringInventoryController extends Controller
             'MOVpdf' => 'nullable|mimes:pdf|max:5120',
         ]);
     
-        $MonitoringInventory = MonitoringInventory::find($ID);
-    
-        if (!$MonitoringInventory) {
-            return response()->json(['message' => 'Entry not found'], 404);
-        }
-    
-        DB::beginTransaction();
-    
-        try {
-            // Handle the file upload
-            if ($request->hasFile('MOVpdf')) {
-                $file = $request->file('MOVpdf');
-                if ($file instanceof \Illuminate\Http\UploadedFile) {
-                    // Delete the old file if it exists
-                    if ($MonitoringInventory->MOVpdf) {
-                        Storage::delete($MonitoringInventory->MOVpdf);
-                    }
-                    // Store the new file and update the filePath variable
-                    $filePath = $file->store('public/Inventory');
-                    $MonitoringInventory->MOVpdf = $filePath;
-                } else {
-                    return response()->json(['message' => 'Uploaded file is not valid'], 400);
-                }
+        // Handle file upload if present
+        if ($request->hasFile('MOVpdf')) {
+            // Delete the old file if it exists
+            if ($MonitoringInventory->MOVpdf) {
+                Storage::disk('public')->delete($MonitoringInventory->MOVpdf);
             }
     
-            // Update the other fields
-            $MonitoringInventory->month = $request->input('month');
-            $MonitoringInventory->location = $request->input('location');
-            $MonitoringInventory->travel_date_from = $request->input('travel_date_from');
-            $MonitoringInventory->travel_date_to = $request->input('travel_date_to');
-            $MonitoringInventory->report_date = $request->input('report_date');
-            $MonitoringInventory->transmittal_date = $request->input('transmittal_date');
-            $MonitoringInventory->released_date = $request->input('released_date');
-            $MonitoringInventory->mmd_personnel = $request->input('mmd_personnel');
-    
-            // Save the changes
-            $MonitoringInventory->save();
-    
-            DB::commit();
-            return response()->json($MonitoringInventory);
-        } catch (Exception $e) {
-            DB::rollBack();
-            \Log::error('Failed to update entry: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to update entry'], 500);
+            // Store the new file
+            $filePath = $request->file('MOVpdf')->store('public/Inventory');
+            $validatedData['MOVpdf'] = $filePath;
+        } else {
+            // If no file is uploaded, ensure the existing file path remains unchanged
+            $validatedData['MOVpdf'] = $MonitoringInventory->MOVpdf;
         }
+    
+        // Update the MonitoringInventory entry with the validated data
+        $MonitoringInventory->update($validatedData);
+    
+        // Return the updated entry as a JSON response
+        return response()->json($MonitoringInventory);
     }
 
     public function show($ID)

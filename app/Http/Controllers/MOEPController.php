@@ -16,7 +16,7 @@ class MOEPController extends Controller
             'permit_no' => 'required|string',
             'issued' => 'required|date',
             'validated' => 'required|date',
-            'reportPDF' => 'required|mimes:pdf|max:5120',
+            'reportPDF' => 'required|mimes:pdf|max:10240',
         ]);
 
         $file = $request->file('reportPDF');

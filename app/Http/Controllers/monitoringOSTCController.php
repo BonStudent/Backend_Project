@@ -137,7 +137,7 @@ class MonitoringOSTCController extends Controller
             }
     
             // Store the new file
-            $filePath = $request->file('MOVpdf')->store('OSTC', 'public');
+            $filePath = $request->file('MOVpdf')->store('public/OSTC');
             $validatedData['MOVpdf'] = $filePath;
         } else {
             // If no file is uploaded, ensure the existing file path remains unchanged
