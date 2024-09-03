@@ -54,4 +54,97 @@ class MonitoringWPMController extends Controller
     {
         return response()->json(MonitoringWPM::all());
     }
+
+    /**
+     * Remove the specified MonitoringWPM entry from storage.
+     *
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($ID)
+    {
+        $MonitoringWPM = MonitoringWPM::find($ID);
+
+        if (!$MonitoringWPM) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+
+        try {
+            if ($MonitoringWPM->MOVpdf) {
+                Storage::delete($MonitoringWPM->MOVpdf);
+            }
+
+            $MonitoringWPM->delete();
+            return response()->json(['message' => 'Entry deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed to delete entry', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Display the specified MonitoringWPM entry.
+     *
+     * @param  int  $no
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($ID)
+    {
+        $data = MonitoringWPM::find($ID);
+        if ($data) {
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
+    /**
+     * Update the specified MonitoringWPM entry in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $ID)
+    {
+        // Find the MonitoringWPM entry by ID
+        $MonitoringWPM = MonitoringWPM::find($ID);
+    
+        if (!$MonitoringWPM) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+    
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'month' => 'required|string',
+            'text_field' => 'required|string',
+            'travel_date_from' => 'nullable|date',
+            'travel_date_to' => 'nullable|date',
+            'report_date' => 'nullable|date',
+            'transmittal_date' => 'nullable|date',
+            'released_date' => 'nullable|date',
+            'mmd_personnel' => 'nullable|string',
+            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
+        ]);
+    
+        // Handle file upload if present
+        if ($request->hasFile('MOVpdf')) {
+            // Delete the old file if it exists
+            if ($MonitoringWPM->MOVpdf) {
+                Storage::disk('public')->delete($MonitoringWPM->MOVpdf);
+            }
+    
+            // Store the new file
+            $filePath = $request->file('MOVpdf')->store('public/Work_Program_Monitoring');
+            $validatedData['MOVpdf'] = $filePath;
+        } else {
+            // If no file is uploaded, ensure the existing file path remains unchanged
+            $validatedData['MOVpdf'] = $MonitoringWPM->MOVpdf;
+        }
+    
+        // Update the MonitoringWPM entry with the validated data
+        $MonitoringWPM->update($validatedData);
+    
+        // Return the updated entry as a JSON response
+        return response()->json($MonitoringWPM);
+    }
 }

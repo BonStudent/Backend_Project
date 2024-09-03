@@ -11,6 +11,8 @@ class MonitoringMB extends Model
 
     protected $table = 'monitoring_mb';
 
+    protected $primaryKey = 'ID'; // Define the primary key column
+
     protected $fillable = [
         'month',
         'petitioner',

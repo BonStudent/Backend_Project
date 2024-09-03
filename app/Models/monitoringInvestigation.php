@@ -11,6 +11,8 @@ class MonitoringInvestigation extends Model
 
     protected $table = 'monitoring_investigation';
 
+    protected $primaryKey = 'ID'; // Define the primary key column
+
     protected $fillable = [
         'month',
         'text_field',

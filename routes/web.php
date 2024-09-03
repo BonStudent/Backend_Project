@@ -114,7 +114,6 @@ Route::get('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'index']);
 Route::post('/api/MonitoringOSTC', [MonitoringOSTCController::class, 'store']);
 Route::put('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'update']);
 Route::delete('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'destroy']);
-// Route::post('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'updateFile']);
 
 //MonitoringInventory
 Route::get('/api/MonitoringInventory', [MonitoringInventoryController::class, 'index']);
@@ -125,20 +124,20 @@ Route::delete('/api/MonitoringInventory/{id}', [MonitoringInventoryController::c
 //MonitoringWPM
 Route::get('/api/MonitoringWPM', [MonitoringWPMController::class, 'index']);
 Route::post('/api/MonitoringWPM', [MonitoringWPMController::class, 'store']);
-Route::get('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'update']);
-Route::post('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'destroy']);
+Route::put('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'update']);
+Route::delete('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'destroy']);
 
 //MonitoringMB
 Route::get('/api/MonitoringMB', [MonitoringMBController::class, 'index']);
 Route::post('/api/MonitoringMB', [MonitoringMBController::class, 'store']);
-Route::get('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'update']);
-Route::post('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'destroy']);
+Route::put('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'update']);
+Route::delete('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'destroy']);
 
 //MonitoringInvestigation
 Route::get('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'index']);
 Route::post('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'store']);
-Route::get('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
-Route::post('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'destroy']);
+Route::put('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
+Route::delete('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'destroy']);
 
 
 Route::post('/add_details', [DetailsController::class, 'create']);

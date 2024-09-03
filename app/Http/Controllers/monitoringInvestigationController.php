@@ -57,4 +57,99 @@ class MonitoringInvestigationController extends Controller
     {
         return response()->json(MonitoringInvestigation::all());
     }
+
+    /**
+     * Remove the specified MonitoringInvestigation entry from storage.
+     *
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($ID)
+    {
+        $MonitoringInvestigation = MonitoringInvestigation::find($ID);
+
+        if (!$MonitoringInvestigation) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+
+        try {
+            if ($MonitoringInvestigation->MOVpdf) {
+                Storage::delete($MonitoringInvestigation->MOVpdf);
+            }
+
+            $MonitoringInvestigation->delete();
+            return response()->json(['message' => 'Entry deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed to delete entry', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Display the specified MonitoringInvestigation entry.
+     *
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($ID)
+    {
+        $data = MonitoringInvestigation::find($ID);
+        if ($data) {
+            return response()->json($data);
+        } else {
+            return response()->json(['error' => 'Not found'], 404);
+        }
+    }
+
+    /**
+     * Update the specified MonitoringInvestigation entry in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $ID
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $ID)
+    {
+        // Find the MonitoringInvestigation entry by ID
+        $MonitoringInvestigation = MonitoringInvestigation::find($ID);
+    
+        if (!$MonitoringInvestigation) {
+            return response()->json(['message' => 'Entry not found'], 404);
+        }
+    
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'month' => 'required|string',
+            'text_field' => 'required|string',
+            'complaint_received' => 'required|string',
+            'date_acted' => 'nullable|date',
+            'report_date' => 'nullable|date',
+            'transmittal_date' => 'nullable|date',
+            'released_date' => 'nullable|date',
+            'mmd_personnel' => 'nullable|string',
+            'remarks' => 'nullable|string',
+            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
+            'coordinates' => 'nullable|string',
+        ]);
+    
+        // Handle file upload if present
+        if ($request->hasFile('MOVpdf')) {
+            // Delete the old file if it exists
+            if ($MonitoringInvestigation->MOVpdf) {
+                Storage::disk('public')->delete($MonitoringInvestigation->MOVpdf);
+            }
+    
+            // Store the new file
+            $filePath = $request->file('MOVpdf')->store('public/Investigation');
+            $validatedData['MOVpdf'] = $filePath;
+        } else {
+            // If no file is uploaded, ensure the existing file path remains unchanged
+            $validatedData['MOVpdf'] = $MonitoringInvestigation->MOVpdf;
+        }
+    
+        // Update the MonitoringInvestigation entry with the validated data
+        $MonitoringInvestigation->update($validatedData);
+    
+        // Return the updated entry as a JSON response
+        return response()->json($MonitoringInvestigation);
+    }   
 }
