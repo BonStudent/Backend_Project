@@ -22,6 +22,9 @@ Route::apiResource('MonitoringInventory', MonitoringInventoryController::class);
 Route::apiResource('MonitoringWPM', MonitoringWPMController::class); //MTSS Work Program Monitoring
 Route::apiResource('MonitoringMB', MonitoringMBController::class); //MTSS Minahang Bayan Monitoring
 Route::apiResource('MonitoringInvestigation', MonitoringInvestigationController::class); //MTSS Investigation
+//MTSS Anti-Illegal
+Route::apiResource('MonitoringDMPF', MonitoringDMPFController::class); //MTSS DMPF
+Route::apiResource('MonitoringPCMRBM', MonitoringPCMRBMController::class); //MTSS PCMRBM
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

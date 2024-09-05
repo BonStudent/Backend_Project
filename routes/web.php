@@ -139,6 +139,20 @@ Route::post('/api/MonitoringInvestigation', [MonitoringInvestigationController::
 Route::put('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
 Route::delete('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'destroy']);
 
+//MonitoringAnti-Illegal
+
+//MonitoringDMPF
+Route::get('/api/MonitoringDMPF', [MonitoringDMPFController::class, 'index']);
+Route::post('/api/MonitoringDMPF', [MonitoringDMPFController::class, 'store']);
+Route::put('/api/MonitoringDMPF/{no}', [MonitoringDMPFController::class, 'update']);
+Route::delete('/api/MonitoringDMPF/{no}', [MonitoringDMPFController::class, 'destroy']);
+
+//MonitoringPCMRBM
+Route::get('/api/MonitoringPCMRBM', [MonitoringPCMRBMController::class, 'index']);
+Route::post('/api/MonitoringPCMRBM', [MonitoringPCMRBMController::class, 'store']);
+Route::put('/api/MonitoringPCMRBM/{no}', [MonitoringPCMRBMController::class, 'update']);
+Route::delete('/api/MonitoringPCMRBM/{no}', [MonitoringPCMRBMController::class, 'destroy']);
+
 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
