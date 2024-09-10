@@ -126,8 +126,9 @@ class MonitoringOSTCController extends Controller
             'sample_inspection' => 'nullable|date',
             'issued' => 'required|date',
             'mmd_personnel' => 'nullable|string',
-            'MOVpdf' => 'nullable|mimes:pdf|max:5120', // Ensure the file is a PDF and max size is 5MB
+            'MOVpdf' => 'required|file|mimes:pdf|max:5120', // Ensure the file is a PDF and max size is 5MB
         ]);
+        
     
         // Handle file upload if present
         if ($request->hasFile('MOVpdf')) {
