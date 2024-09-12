@@ -123,7 +123,7 @@ class MonitoringWPMController extends Controller
             'transmittal_date' => 'nullable|date',
             'released_date' => 'nullable|date',
             'mmd_personnel' => 'nullable|string',
-            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
+            'MOVpdf' => 'required|file|mimes:pdf|max:5120',
         ]);
     
         // Handle file upload if present

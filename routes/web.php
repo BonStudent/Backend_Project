@@ -124,7 +124,7 @@ Route::delete('/api/MonitoringInventory/{id}', [MonitoringInventoryController::c
 //MonitoringWPM
 Route::get('/api/MonitoringWPM', [MonitoringWPMController::class, 'index']);
 Route::post('/api/MonitoringWPM', [MonitoringWPMController::class, 'store']);
-Route::put('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'update']);
+Route::post('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'update']);
 Route::delete('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'destroy']);
 
 //MonitoringMB
