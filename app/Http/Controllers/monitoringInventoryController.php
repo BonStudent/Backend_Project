@@ -6,6 +6,7 @@ use App\Models\MonitoringInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str; // Add this for generating random strings
 use Exception;
 
 class MonitoringInventoryController extends Controller
@@ -113,7 +114,7 @@ class MonitoringInventoryController extends Controller
             'transmittal_date' => 'nullable|date',
             'released_date' => 'nullable|date',
             'mmd_personnel' => 'nullable|string',
-            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
+            'MOVpdf' => 'required|file|mimes:pdf|max:5120',
         ]);
     
         // Handle file upload if present

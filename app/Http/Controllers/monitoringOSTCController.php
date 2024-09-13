@@ -109,7 +109,7 @@ class MonitoringOSTCController extends Controller
      */
     public function update(Request $request, $no)
     {
-        // Find the MonitoringOSTC entry by ID
+        // Find the MonitoringOSTC entry by no
         $MonitoringOSTC = MonitoringOSTC::find($no);
     
         if (!$MonitoringOSTC) {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MonitoringMB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str; // Add this for generating random strings
+use Exception;
 
 class MonitoringMBController extends Controller
 {
@@ -101,58 +104,72 @@ class MonitoringMBController extends Controller
         }
     }
 
-    /**
-     * Update the specified MonitoringMB entry in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $ID
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, $ID)
-    {
-        // Find the MonitoringMB entry by ID
-        $MonitoringMB = MonitoringMB::find($ID);
-    
-        if (!$MonitoringMB) {
-            return response()->json(['message' => 'Entry not found'], 404);
-        }
-    
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'month' => 'required|string',
-            'petitioner' => 'required|string',
-            'location' => 'required|string',
-            'travel_date_from' => 'nullable|date',
-            'travel_date_to' => 'nullable|date',
-            'report_date' => 'nullable|date',
-            'transmittal_date' => 'nullable|date',
-            'released_date' => 'nullable|date',
-            'mmd_personnel' => 'nullable|string',
-            'MOVpdf' => 'nullable|mimes:pdf|max:5120',
-            'map' => 'nullable|mimes:jpeg|max:5120',
-        ]);
-    
-        // Handle file upload if present
-        if ($request->hasFile('MOVpdf')) {
-            // Delete the old file if it exists
-            if ($MonitoringMB->MOVpdf) {
-                Storage::disk('public')->delete($MonitoringMB->MOVpdf);
-            }
-    
-            // Store the new file
-            $filePath = $request->file('MOVpdf')->store('public/Minahang_Bayan_Monitoring');
-            $validatedData['MOVpdf'] = $filePath;
-        } else {
-            // If no file is uploaded, ensure the existing file path remains unchanged
-            $validatedData['MOVpdf'] = $MonitoringMB->MOVpdf;
-        }
-    
-        // Update the MonitoringMB entry with the validated data
-        $MonitoringMB->update($validatedData);
-    
-        // Return the updated entry as a JSON response
-        return response()->json($MonitoringMB);
+/**
+ * Update the specified MonitoringMB entry in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $ID
+ * @return \Illuminate\Http\JsonResponse
+ */
+public function update(Request $request, $ID)
+{
+    // Find the MonitoringMB entry by ID
+    $MonitoringMB = MonitoringMB::find($ID);
+
+    if (!$MonitoringMB) {
+        return response()->json(['message' => 'Entry not found'], 404);
     }
 
+    // Validate the incoming request data
+    $validatedData = $request->validate([
+        'month' => 'required|string',
+        'petitioner' => 'required|string',
+        'location' => 'required|string',
+        'travel_date_from' => 'nullable|date',
+        'travel_date_to' => 'nullable|date',
+        'report_date' => 'nullable|date',
+        'transmittal_date' => 'nullable|date',
+        'released_date' => 'nullable|date',
+        'mmd_personnel' => 'nullable|string',
+        'MOVpdf' => 'required|file|mimes:pdf|max:5120',
+        'map' => 'required|file|mimes:jpeg|max:5120',
+    ]);
+
+    // Handle MOVpdf file upload if present
+    if ($request->hasFile('MOVpdf')) {
+        // Delete the old file if it exists
+        if ($MonitoringMB->MOVpdf) {
+            Storage::disk('public')->delete($MonitoringMB->MOVpdf);
+        }
+
+        // Store the new MOVpdf file
+        $filePath = $request->file('MOVpdf')->store('public/Minahang_Bayan_Monitoring');
+        $validatedData['MOVpdf'] = $filePath;
+    } else {
+        // Keep the old MOVpdf path if no new file is uploaded
+        $validatedData['MOVpdf'] = $MonitoringMB->MOVpdf;
+    }
+
+    // Handle map file upload if present
+    if ($request->hasFile('map')) {
+        // Delete the old map file if it exists
+        if ($MonitoringMB->map) {
+            Storage::disk('public')->delete($MonitoringMB->map);
+        }
+
+        // Store the new map file
+        $mapPath = $request->file('map')->store('public/Minahang_Bayan_Monitoring');
+        $validatedData['map'] = $mapPath;
+    } else {
+        // Keep the old map path if no new file is uploaded
+        $validatedData['map'] = $MonitoringMB->map;
+    }
+
+    // Update the MonitoringMB entry with the validated data
+    $MonitoringMB->update($validatedData);
+
+    // Return the updated entry as a JSON response
+    return response()->json($MonitoringMB);
+}
 
 }

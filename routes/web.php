@@ -118,7 +118,7 @@ Route::delete('/api/MonitoringOSTC/{no}', [MonitoringOSTCController::class, 'des
 //MonitoringInventory
 Route::get('/api/MonitoringInventory', [MonitoringInventoryController::class, 'index']);
 Route::post('/api/MonitoringInventory', [MonitoringInventoryController::class, 'store']);
-Route::put('/api/MonitoringInventory/{id}', [MonitoringInventoryController::class, 'update']);
+Route::post('/api/MonitoringInventory/{id}', [MonitoringInventoryController::class, 'update']);
 Route::delete('/api/MonitoringInventory/{id}', [MonitoringInventoryController::class, 'destroy']);
 
 //MonitoringWPM
@@ -130,13 +130,13 @@ Route::delete('/api/MonitoringWPM/{ID}', [MonitoringWPMController::class, 'destr
 //MonitoringMB
 Route::get('/api/MonitoringMB', [MonitoringMBController::class, 'index']);
 Route::post('/api/MonitoringMB', [MonitoringMBController::class, 'store']);
-Route::put('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'update']);
+Route::post('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'update']);
 Route::delete('/api/MonitoringMB/{ID}', [MonitoringMBController::class, 'destroy']);
 
 //MonitoringInvestigation
 Route::get('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'index']);
 Route::post('/api/MonitoringInvestigation', [MonitoringInvestigationController::class, 'store']);
-Route::put('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
+Route::post('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'update']);
 Route::delete('/api/MonitoringInvestigation/{ID}', [MonitoringInvestigationController::class, 'destroy']);
 
 //MonitoringAnti-Illegal

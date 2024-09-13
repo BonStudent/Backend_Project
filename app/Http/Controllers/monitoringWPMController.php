@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\MonitoringWPM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str; // Add this for generating random strings
+use Exception;
 
 class MonitoringWPMController extends Controller
 {
@@ -84,7 +87,7 @@ class MonitoringWPMController extends Controller
     /**
      * Display the specified MonitoringWPM entry.
      *
-     * @param  int  $no
+     * @param  int  $ID
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($ID)
