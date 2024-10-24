@@ -168,3 +168,39 @@ Route::post('/add_uploads', [UploadsController::class, 'create']);
 Route::post('/update_uploads/{id_reference}/', [UploadsController::class, 'update']);
 Route::post('/add_images', [ImagesController::class, 'store'])->name('images.store');
 Route::post('/update_images/{id_reference}/', [ImagesController::class, 'update']);
+
+// Route to serve files
+Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
+    // Define the base storage path
+    $basePath = storage_path('app/public/');
+
+    // List of allowed folders
+    $allowedFolders = [
+        'Inventory',
+        'Investigation',
+        'Minahang_Bayan_Monitoring',
+        'MOEP',
+        'OSTC',
+        'Word_Program_Monitoring'
+    ];
+
+    // Check if the requested folder is allowed
+    if (!in_array($folder, $allowedFolders)) {
+        abort(404);
+    }
+
+    // Construct the full path to the file
+    $path = $basePath . $folder . '/' . $filename;
+
+    // Check if the file exists
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    // Get the file content and MIME type
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    // Return the file as a response
+    return Response::make($file, 200)->header("Content-Type", $type);
+});
