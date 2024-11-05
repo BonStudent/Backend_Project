@@ -26,6 +26,7 @@ class DetailsController extends Controller
             'contact_no' => 'required',
             'email' => 'required',
             'others' => 'required',
+            'stage_of_processing' => 'required',
             'application' => 'required',
         ]);
 
@@ -59,6 +60,7 @@ class DetailsController extends Controller
             'contact_no' => 'nullable',
             'email' => 'nullable',
             'others' => 'nullable',
+            'stage_of_processing' => 'nullable',
             'application' => 'nullable',
         ]);
 
