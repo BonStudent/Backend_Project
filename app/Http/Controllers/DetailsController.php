@@ -26,7 +26,7 @@ class DetailsController extends Controller
             'contact_no' => 'required',
             'email' => 'required',
             'others' => 'required',
-            'stage_of_processing' => 'required',
+            'stage_of_processing' => 'nullable',
             'application' => 'required',
         ]);
 
@@ -69,5 +69,44 @@ class DetailsController extends Controller
 
         // Optionally, you can return a response indicating success
         return response()->json(['message' => 'Record updated successfully'], 200);
+    }
+
+    public function updateDetails(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'nullable|string|max:255',
+            'stage_of_processing' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $detail = Details::find($id);
+
+            if (!$detail) {
+                return response()->json(['message' => 'Detail not found'], 404);
+            }
+
+            $detail->status = $request->input('status');
+            $detail->stage_of_processing = $request->input('stage_of_processing');
+            $detail->save();
+
+            return response()->json(['message' => 'Details updated successfully', 'detail' => $detail], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating details', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getDetails($id)
+    {
+        try {
+            $detail = Details::find($id);
+
+            if (!$detail) {
+                return response()->json(['message' => 'Detail not found'], 404);
+            }
+
+            return response()->json($detail, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error fetching details', 'error' => $e->getMessage()], 500);
+        }
     }
 }
