@@ -74,38 +74,38 @@ class DetailsController extends Controller
     }
 
     // Method to delete an existing record
-public function delete($id)
-{
-    // Find the record by ID
-    $details = Details::findOrFail($id);
-
-    // Delete the record
-    $details->delete();
-
-    // Optionally, you can return a response indicating success
-    return response()->json(['message' => 'Record deleted successfully'], 200);
-}
-// Method to update the comment of a specific detail
-public function updateComment(Request $request, )
-{
-    try {
-        // Validate incoming request data
-        $request->validate([
-            'id' => 'required', // Ensure detail_id exists in the database
-            'comments' => 'required|string|max:1000', // Validate the comment field
-        ]);
-
+    public function delete($id)
+    {
         // Find the record by ID
-        $details = Details::findOrFail($request->id);
+        $details = Details::findOrFail($id);
 
-        // Update only the comment field
-        $details->update([
-            'comments' => $request->comments,
-        ]);
+        // Delete the record
+        $details->delete();
 
-        return response()->json(['message' => 'Comment updated successfully'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to update comment', 'exception' => $e->getMessage()], 500);
+        // Optionally, you can return a response indicating success
+        return response()->json(['message' => 'Record deleted successfully'], 200);
     }
-}
+    // Method to update the comment of a specific detail
+    public function updateComment(Request $request, )
+    {
+        try {
+            // Validate incoming request data
+            $request->validate([
+                'id' => 'required', // Ensure detail_id exists in the database
+                'comments' => 'required|string|max:1000', // Validate the comment field
+            ]);
+
+            // Find the record by ID
+            $details = Details::findOrFail($request->id);
+
+            // Update only the comment field
+            $details->update([
+                'comments' => $request->comments,
+            ]);
+
+            return response()->json(['message' => 'Comment updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update comment', 'exception' => $e->getMessage()], 500);
+        }
+    }
 }
