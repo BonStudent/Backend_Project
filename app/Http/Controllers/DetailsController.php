@@ -85,4 +85,27 @@ public function delete($id)
     // Optionally, you can return a response indicating success
     return response()->json(['message' => 'Record deleted successfully'], 200);
 }
+public function updateDetails(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'nullable|string|max:255',
+            'stage_of_processing' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $detail = Details::find($id);
+
+            if (!$detail) {
+                return response()->json(['message' => 'Detail not found'], 404);
+            }
+
+            $detail->status = $request->input('status');
+            $detail->stage_of_processing = $request->input('stage_of_processing');
+            $detail->save();
+
+            return response()->json(['message' => 'Details updated successfully', 'detail' => $detail], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error updating details', 'error' => $e->getMessage()], 500);
+        }
+    }
 }
