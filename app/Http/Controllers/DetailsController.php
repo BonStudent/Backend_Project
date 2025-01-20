@@ -12,6 +12,8 @@ class DetailsController extends Controller
     {
         // Validate incoming request data
         $request->validate([
+            'stage_of_processing' => 'required',
+            'stage_of_processing_details' => 'nullable',
             'status' => 'required',
             'tenement_number' => 'required',
             'tenement_name' => 'required',
@@ -45,6 +47,8 @@ class DetailsController extends Controller
         $details = Details::findOrFail($id);
         // Validate incoming request data
         $request->validate([
+            'stage_of_processing' => 'nullable',
+            'stage_of_processing_details' => 'nullable',
             'status' => 'nullable',
             'tenement_number' => 'nullable',
             'tenement_name' => 'nullable',
@@ -68,4 +72,17 @@ class DetailsController extends Controller
         // Optionally, you can return a response indicating success
         return response()->json(['message' => 'Record updated successfully'], 200);
     }
+
+    // Method to delete an existing record
+public function delete($id)
+{
+    // Find the record by ID
+    $details = Details::findOrFail($id);
+
+    // Delete the record
+    $details->delete();
+
+    // Optionally, you can return a response indicating success
+    return response()->json(['message' => 'Record deleted successfully'], 200);
+}
 }

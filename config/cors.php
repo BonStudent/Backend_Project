@@ -39,6 +39,7 @@ return [
         '/add_images',
         '/update_images/*',
         '/get_images/',
+        '/delete_detail/*',
         
     ],
 

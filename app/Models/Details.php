@@ -11,6 +11,8 @@ class Details extends Model
     protected $table = 'details';
 
     protected $fillable = [
+        'stage_of_processing',
+        'stage_of_processing_details',
         'status',
         'tenement_number',
         'tenement_name',
