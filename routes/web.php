@@ -157,6 +157,7 @@ Route::delete('/api/MonitoringPCMRBM/{no}', [MonitoringPCMRBMController::class, 
 Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
 Route::delete('/delete_detail/{id}/', [DetailsController::class, 'delete']);
+Route::post('/update_comment/', [DetailsController::class, 'updateComment']);
 
 Route::post('/add_accounts', [AccountsController::class, 'create']);
 Route::post('/update_accounts/{id}/', [AccountsController::class, 'update']); 

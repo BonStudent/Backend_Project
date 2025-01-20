@@ -40,6 +40,7 @@ return [
         '/update_images/*',
         '/get_images/',
         '/delete_detail/*',
+        '/update_comment/'
         
     ],
 

@@ -85,27 +85,27 @@ public function delete($id)
     // Optionally, you can return a response indicating success
     return response()->json(['message' => 'Record deleted successfully'], 200);
 }
-public function updateDetails(Request $request, $id)
-    {
+// Method to update the comment of a specific detail
+public function updateComment(Request $request, )
+{
+    try {
+        // Validate incoming request data
         $request->validate([
-            'status' => 'nullable|string|max:255',
-            'stage_of_processing' => 'nullable|string|max:255',
+            'id' => 'required', // Ensure detail_id exists in the database
+            'comments' => 'required|string|max:1000', // Validate the comment field
         ]);
 
-        try {
-            $detail = Details::find($id);
+        // Find the record by ID
+        $details = Details::findOrFail($request->id);
 
-            if (!$detail) {
-                return response()->json(['message' => 'Detail not found'], 404);
-            }
+        // Update only the comment field
+        $details->update([
+            'comments' => $request->comments,
+        ]);
 
-            $detail->status = $request->input('status');
-            $detail->stage_of_processing = $request->input('stage_of_processing');
-            $detail->save();
-
-            return response()->json(['message' => 'Details updated successfully', 'detail' => $detail], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error updating details', 'error' => $e->getMessage()], 500);
-        }
+        return response()->json(['message' => 'Comment updated successfully'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to update comment', 'exception' => $e->getMessage()], 500);
     }
+}
 }
