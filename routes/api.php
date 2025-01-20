@@ -11,6 +11,7 @@ use App\Http\Controllers\MonitoringInventoryController;
 use App\Http\Controllers\MonitoringWPMController;
 use App\Http\Controllers\MonitoringMBController;
 use App\Http\Controllers\MonitoringInvestigationController;
+use App\Http\Controllers\DetailsController;
 
 
 Route::apiResource('csag', CSAGController::class);
@@ -25,6 +26,9 @@ Route::apiResource('MonitoringInvestigation', MonitoringInvestigationController:
 //MTSS Anti-Illegal
 Route::apiResource('MonitoringDMPF', MonitoringDMPFController::class); //MTSS DMPF
 Route::apiResource('MonitoringPCMRBM', MonitoringPCMRBMController::class); //MTSS PCMRBM
+
+// Route::apiResource('Details', DetailsController::class);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

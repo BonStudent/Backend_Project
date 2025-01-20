@@ -27,7 +27,9 @@ class Details extends Model
         'contact_no',
         'email',
         'others',
+        'stage_of_processing',
         'application',
+        'comments',
     ];
 
     public $timestamps = false;
