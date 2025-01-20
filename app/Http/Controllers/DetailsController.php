@@ -28,6 +28,7 @@ class DetailsController extends Controller
             'others' => 'required',
             'stage_of_processing' => 'nullable',
             'application' => 'required',
+            'comments' => 'nullable',
         ]);
 
         // Create a new Details model instance and fill it with request data
@@ -62,6 +63,7 @@ class DetailsController extends Controller
             'others' => 'nullable',
             'stage_of_processing' => 'nullable',
             'application' => 'nullable',
+            'comments' => 'nullable',
         ]);
 
         // Update the record with the new data
@@ -85,4 +87,42 @@ class DetailsController extends Controller
             return response()->json(['message' => 'Error fetching details', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // Method to update the comment of a specific detail
+public function updateComment(Request $request)
+{
+    // Validate incoming request data
+    $request->validate([
+        'detail_id' => 'required|exists:details,id', // Ensure detail_id exists in the database
+        'comments' => 'required|string|max:1000', // Validate the comment field
+    ]);
+
+    try {
+        // Find the record by ID
+        $details = Details::findOrFail($request->detail_id);
+
+        // Update only the comment field
+        $details->update([
+            'comments' => $request->comments,
+        ]);
+
+        // Return a success response
+        return response()->json(['message' => 'Comment updated successfully'], 200);
+    } catch (\Exception $e) {
+        // Handle any errors
+        return response()->json(['error' => 'Failed to update comment'], 500);
+    }
+}
+
+// DetailController.php
+public function destroy($id)
+{
+    $detail = Detail::find($id);
+    if ($detail) {
+        $detail->delete();
+        return response()->json(['message' => 'Detail deleted successfully'], 200);
+    } else {
+        return response()->json(['message' => 'Detail not found'], 404);
+    }
+}
 }

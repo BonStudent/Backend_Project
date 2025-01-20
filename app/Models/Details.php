@@ -27,6 +27,7 @@ class Details extends Model
         'others',
         'stage_of_processing',
         'application',
+        'comments',
     ];
 
     public $timestamps = false;
