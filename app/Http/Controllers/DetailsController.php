@@ -124,20 +124,20 @@ class DetailsController extends Controller
     }
 
     // Method to update the status of a specific detail
-    public function updateStatus(Request $request, )
+    public function updateStatus(Request $request)
     {
         try {
             // Validate incoming request data
             $request->validate([
-                'id' => 'required', // Ensure detail_id exists in the database
-                'status' => 'required|string|max:1000', // Validate the comment field
-                'stage_of_processing' => 'nullable', // Validate the comment field
+                'id' => 'nullable',
+                'status' => 'required|string|max:1000', // Validate the status field
+                'stage_of_processing' => 'nullable|string|max:1000', // Validate the stage_of_processing field
             ]);
 
             // Find the record by ID
             $details = Details::findOrFail($request->id);
 
-            // Update only the comment field
+            // Update the status and stage_of_processing fields
             $details->update([
                 'status' => $request->status,
                 'stage_of_processing' => $request->stage_of_processing,
@@ -145,7 +145,7 @@ class DetailsController extends Controller
 
             return response()->json(['message' => 'Status updated successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to Status', 'exception' => $e->getMessage()], 500);
+            return response()->json(['error' => 'Failed to update status', 'exception' => $e->getMessage()], 500);
         }
     }
 }
