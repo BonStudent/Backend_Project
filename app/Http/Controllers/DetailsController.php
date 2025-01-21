@@ -131,7 +131,7 @@ class DetailsController extends Controller
             $request->validate([
                 'id' => 'required', // Ensure detail_id exists in the database
                 'status' => 'required|string|max:1000', // Validate the comment field
-                'stage_of_processing' => 'required|string|max:1000', // Validate the comment field
+                'stage_of_processing' => 'nullable', // Validate the comment field
             ]);
 
             // Find the record by ID
