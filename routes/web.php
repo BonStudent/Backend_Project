@@ -49,6 +49,8 @@ Route::get('/get_details', function () {
     // Example: Return the retrieved records as JSON
     return response()->json($details);
 });
+// Route to get a specific record by ID
+Route::get('/get_details/{id}', [DetailsController::class, 'getDetailsById']);
 
 Route::get('/get_accounts', function () {
     // Example: Retrieve all records from the "tabledetails" table
@@ -158,6 +160,7 @@ Route::post('/add_details', [DetailsController::class, 'create']);
 Route::post('/update_details/{id}/', [DetailsController::class, 'update']);
 Route::delete('/delete_detail/{id}/', [DetailsController::class, 'delete']);
 Route::post('/update_comment', [DetailsController::class, 'updateComment']);
+Route::post('/update_details', [DetailsController::class, 'updateStatus']);
 Route::post('/add_accounts', [AccountsController::class, 'create']);
 Route::post('/update_accounts/{id}/', [AccountsController::class, 'update']); 
 Route::post('/add_remarks', [RemarksController::class, 'create']);

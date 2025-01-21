@@ -19,6 +19,7 @@ return [
         'api/*',
         'sanctum/csrf-cookie', 
         '/get_details/', 
+        '/get_details/*',
         '/add_details/', 
         '/update_details/*',
         '/get_accounts/', 
