@@ -22,16 +22,6 @@ class Uploads extends Model
         'file8',
         'file9',
         'file10',
-        'file11',
-        'file12',
-        'file13',
-        'file14',
-        'file15',
-        'file16',
-        'file17',
-        'file18',
-        'file19',
-        'file20',
     ];
 
     public $timestamps = false;

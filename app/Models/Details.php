@@ -11,25 +11,13 @@ class Details extends Model
     protected $table = 'details';
 
     protected $fillable = [
-        'stage_of_processing',
-        'stage_of_processing_details',
-        'status',
-        'tenement_number',
-        'tenement_name',
-        'area_hectares',
-        'date_filed',
-        'barangay',
-        'city',
-        'province',
-        'commodity',
-        'authorized_rep',
-        'category',
-        'contact_no',
-        'email',
-        'others',
-        'stage_of_processing',
-        'application',
-        'comments',
+        'stage_of_processing', 'stage_of_processing_details', 'status',
+        'tenement_number', 'tenement_name', 'area_hectares','area_hectares1','area_hectares2','area_hectares3', 'date_filed',
+        'barangay', 'barangay1', 'barangay2', 'barangay3',
+        'city', 'city1', 'city2', 'city3',
+        'province', 'province1', 'province2', 'province3',
+        'commodity', 'authorized_rep', 'category', 'contact_no',
+        'email', 'address', 'oth_rs', 'others', 'application'
     ];
 
     public $timestamps = false;

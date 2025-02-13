@@ -10,35 +10,98 @@ class DetailsController extends Controller
     // Method to create a new record
     public function create(Request $request)
     {
+        // Log the received data to check what is being sent from Vue.js
+    \Log::info('Received data:', $request->all());
         // Validate incoming request data
         $request->validate([
             'stage_of_processing' => 'required',
-            'stage_of_processing_details' => 'nullable',
             'status' => 'required',
-            'tenement_number' => 'required',
             'tenement_name' => 'required',
+            'date_filed' => 'required|date',
+            'barangay' => 'nullable',
+            'barangay1' => 'nullable',
+            'barangay2' => 'nullable',
+            'barangay3' => 'nullable',
             'area_hectares' => 'required',
-            'date_filed' => 'required',
-            'barangay' => 'required',
-            'city' => 'required',
-            'province' => 'required',
+            'area_hectares1' => 'nullable',
+            'area_hectares2' => 'nullable',
+            'area_hectares3' => 'nullable',
+            'city' => 'nullable',
+            'city1' => 'nullable',
+            'city2' => 'nullable',
+            'city3' => 'nullable',
+            'province' => 'nullable',
+            'province1' => 'nullable',
+            'province2' => 'nullable',
+            'province3' => 'nullable',
             'commodity' => 'required',
             'authorized_rep' => 'required',
             'category' => 'required',
             'contact_no' => 'required',
-            'email' => 'required',
-            'others' => 'required',
+            'email' => 'required|email',
+            'address' => 'required',
+            'others' => 'nullable',
             'application' => 'required',
         ]);
-
+    
+        // Process dynamic location fields
+        $barangays = [
+            $request->barangay,
+            $request->barangay1,
+            $request->barangay2,
+            $request->barangay3
+        ];
+    
+        $cities = [
+            $request->city,
+            $request->city1,
+            $request->city2,
+            $request->city3
+        ];
+    
+        $provinces = [
+            $request->province,
+            $request->province1,
+            $request->province2,
+            $request->province3
+        ];
+    
+        // Filter out null or empty values
+        $barangays = array_filter($barangays, fn($value) => !empty($value));
+        $cities = array_filter($cities, fn($value) => !empty($value));
+        $provinces = array_filter($provinces, fn($value) => !empty($value));
+    
         // Create a new Details model instance and fill it with request data
         $details = new Details();
-        $details->fill($request->all());
+        $details->fill($request->except([
+            'barangay', 'barangay1', 'barangay2', 'barangay3',
+            'city', 'city1', 'city2', 'city3',
+            'province', 'province1', 'province2', 'province3'
+        ]));
+    
+        // Save each location field
+        $details->barangay = $barangays[0] ?? null;
+        $details->barangay1 = $barangays[1] ?? null;
+        $details->barangay2 = $barangays[2] ?? null;
+        $details->barangay3 = $barangays[3] ?? null;
+    
+        $details->city = $cities[0] ?? null;
+        $details->city1 = $cities[1] ?? null;
+        $details->city2 = $cities[2] ?? null;
+        $details->city3 = $cities[3] ?? null;
+    
+        $details->province = $provinces[0] ?? null;
+        $details->province1 = $provinces[1] ?? null;
+        $details->province2 = $provinces[2] ?? null;
+        $details->province3 = $provinces[3] ?? null;
+    
+        // Save the record
         $details->save();
-
-        // Optionally, you can return a response indicating success
-        return response()->json(['message' => 'Record created successfully'], 201);
+    
+        // Optionally, return a response indicating success
+        return response()->json(['message' => 'Record created successfully', 'data' => $details], 201);
     }
+    
 
     // Method to update an existing record
     public function update(Request $request, $id)
@@ -53,15 +116,29 @@ class DetailsController extends Controller
             'tenement_number' => 'nullable',
             'tenement_name' => 'nullable',
             'area_hectares' => 'nullable',
-            'date_filed' => 'required',
+            'area_hectares1' => 'nullable',
+            'area_hectares2' => 'nullable',
+            'area_hectares3' => 'nullable',
+            'date_filed' => 'nullable',
             'barangay' => 'nullable',
+            'barangay1' => 'nullable',
+            'barangay2' => 'nullable',
+            'barangay3' => 'nullable',
             'city' => 'nullable',
+            'city1' => 'nullable',
+            'city2' => 'nullable',
+            'city3' => 'nullable',
             'province' => 'nullable',
+            'province1' => 'nullable',
+            'province2' => 'nullable',
+            'province3' => 'nullable',   
             'commodity' => 'nullable',
             'authorized_rep' => 'nullable',
             'category' => 'nullable',
             'contact_no' => 'nullable',
             'email' => 'nullable',
+            'address' => 'nullable',
+            'oth_rs' => 'nullable',
             'others' => 'nullable',
             'application' => 'nullable',
         ]);

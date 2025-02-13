@@ -89,13 +89,19 @@ Route::get('/get_files', function () {
     // Example: Return the retrieved records as JSON
     return response()->json($accounts);
 });
-Route::get('/get_images', function () {
-    // Example: Retrieve all records from the "tabledetails" table
-    $accounts = Images::all();
+// Route::get('/get_images', function () {
+//     // Example: Retrieve all records from the "tabledetails" table
+//     $accounts = Images::all();
 
-    // Example: Return the retrieved records as JSON
-    return response()->json($accounts);
+//     // Example: Return the retrieved records as JSON
+//     return response()->json($accounts);
+// });
+Route::get('/get_images', function () {
+    $images = Images::all();
+
+    return response()->json($images);
 });
+Route::post('/update_images/{id_reference}', [ImagesController::class, 'update']);
 
 //csag
 Route::get('/api/csag', [CSAGController::class, 'index']);
@@ -171,7 +177,7 @@ Route::post('/add_mtsrstatus', [MtsrStatusController::class, 'create']);
 Route::post('/update_mtsrstatus/{id_reference}/', [MtsrStatusController::class, 'update']);
 Route::post('/add_uploads', [UploadsController::class, 'create']);
 Route::post('/update_uploads/{id_reference}/', [UploadsController::class, 'update']);
-Route::post('/add_images', [ImagesController::class, 'store'])->name('images.store');
+Route::post('/add_images', [ImagesController::class, 'store']);
 Route::post('/update_images/{id_reference}/', [ImagesController::class, 'update']);
 
 // Route to serve files
