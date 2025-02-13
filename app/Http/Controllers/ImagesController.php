@@ -15,22 +15,22 @@ class ImagesController extends Controller
 
         // Validate the uploaded images
         $request->validate([
-            'img1' => 'array',
             'img1.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img2' => 'array',
             'img2.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img3' => 'array',
             'img3.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img4' => 'array',
             'img4.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img5' => 'array',
             'img5.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img6.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img7.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img7.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img9.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img10.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Find or create the Images record
         $imageRecord = Images::firstOrNew(['id_reference' => $id_reference]);
 
-        $imgKeys = ['img1', 'img2', 'img3', 'img4', 'img5'];
+        $imgKeys = ['img1', 'img2', 'img3', 'img4', 'img5','img6', 'img7', 'img8', 'img9', 'img10'];
         $newImages = [];
 
         foreach ($imgKeys as $imgKey) {
