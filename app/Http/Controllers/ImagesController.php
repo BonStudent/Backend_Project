@@ -39,7 +39,7 @@ class ImagesController extends Controller
                 if (!empty($imageRecord->$imgKey)) {
                     $oldimgPaths = json_decode($imageRecord->$imgKey, true);
                     foreach ($oldimgPaths as $oldPath) {
-                        Storage::disk('public')->delete("uploads/{$imgKey}/{$oldPath}");
+                        Storage::disk('public')->delete("Images/{$imgKey}/{$oldPath}");
                     }
                 }
 
@@ -47,7 +47,7 @@ class ImagesController extends Controller
                 $uploadedPaths = [];
                 foreach ($request->file($imgKey) as $img) {
                     $originalName = time() . '-' . $img->getClientOriginalName(); // Add timestamp to avoid conflicts
-                    $path = $img->storeAs("uploads/{$imgKey}", $originalName, 'public');
+                    $path = $img->storeAs("Images/{$imgKey}", $originalName, 'public');
                     $uploadedPaths[] = $originalName;
                 }
                 $newImages[$imgKey] = $uploadedPaths;

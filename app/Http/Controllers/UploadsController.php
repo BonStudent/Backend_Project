@@ -45,7 +45,7 @@ class UploadsController extends Controller
                 foreach ($request->file($fileKey) as $file) {
                     $fileExtension = $file->getClientOriginalExtension();
                     $fileName = Str::uuid() . '.' . $fileExtension; // Generate UUID for file name
-                    $filePath = $file->storeAs('public/uploads/' . $fileKey, $fileName);
+                    $filePath = $file->storeAs('MandatoryRequirements/' . $fileKey, $fileName);
                     $filePaths[$fileKey][] = $filePath;
                 }
             }
@@ -124,9 +124,9 @@ class UploadsController extends Controller
                     $originalName = $file->getClientOriginalName();
                     $extension = $file->getClientOriginalExtension();
                     // Construct the path including the original name and extension
-                    $path = "public/uploads/{$fileKey}/{$originalName}";
+                    $path = "MandatoryRequirements/{$fileKey}/{$originalName}";
                     // Store the file with its original name
-                    $file->storeAs("public/uploads/{$fileKey}", $originalName, 'public');
+                    $file->storeAs("MandatoryRequirements/{$fileKey}", $originalName, 'public');
 
                     // Store only the original file name
                     $newFiles[$fileKey][] = $originalName;

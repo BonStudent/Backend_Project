@@ -192,7 +192,9 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
         'Minahang_Bayan_Monitoring',
         'MOEP',
         'OSTC',
-        'Word_Program_Monitoring'
+        'Word_Program_Monitoring',
+        'MandatoryRequirements',
+        'Images'
     ];
 
     // Check if the requested folder is allowed
