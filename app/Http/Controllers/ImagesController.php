@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Images;
+use Illuminate\Support\Str; // Import the Str class for UUID generation
 
 class ImagesController extends Controller
 {
@@ -15,6 +16,7 @@ class ImagesController extends Controller
             'img' => 'array',
             'img.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
         $id_reference = $validatedData['id_reference'];
 
         $imageRecord = Images::firstOrNew(['id_reference' => $id_reference]);
@@ -25,10 +27,10 @@ class ImagesController extends Controller
         foreach ($imgKeys as $imgKey) {
             if ($request->hasFile($imgKey)) {
                 // Delete old files if they exist
-                $oldFilePaths = json_decode($upload->$imgKey, true) ?? [];
+                $oldFilePaths = json_decode($imageRecord->$imgKey, true) ?? [];
                 foreach ($oldFilePaths as $oldPath) {
-                    if (Storage::disk('public')->exists("MandatoryRequirements/{$imgKey}/{$oldPath}")) {
-                        Storage::disk('public')->delete("MandatoryRequirements/{$imgKey}/{$oldPath}");
+                    if (Storage::disk('public')->exists("Images/{$imgKey}/{$oldPath}")) {
+                        Storage::disk('public')->delete("Images/{$imgKey}/{$oldPath}");
                     }
                 }
     
@@ -36,7 +38,7 @@ class ImagesController extends Controller
                 $uploadedPaths = [];
                 foreach ($request->file($imgKey) as $img) {
                     $originalName = time() . '-' . $img->getClientOriginalName();
-                    $path = $img->storeAs("public/MandatoryRequirements/{$imgKey}", $originalName);
+                    $path = $img->storeAs("public/Images/{$imgKey}", $originalName);
                     $uploadedPaths[] = basename($path);
                 }
     
@@ -45,21 +47,15 @@ class ImagesController extends Controller
         }
 
         // Update the database with new image paths
-        foreach ($newImages as $key => $paths) {
-            $imageRecord->$key = json_encode($paths);
+        foreach ($newImages as $imgkey => $paths) {
+            $imageRecord->$imgkey = json_encode($paths);
         }
 
-        // Save changes to the database
-        if ($imageRecord->isDirty()) {
-            $imageRecord->save();
-            return response()->json([
-                'message' => 'Update successful',
-                'updated_files' => $newImages,
-            ], 200);
-        }
-
+        $imageRecord->save();
+    
         return response()->json([
-            'message' => 'No changes detected.',
-        ], 304);
+            'message' => 'Update successful',
+            'updated_images' => $newImages,
+        ], 200);
     }
 }
