@@ -14,7 +14,7 @@ class ImagesController extends Controller
         $validatedData = $request->validate([
             'id_reference' => 'required|integer',
             'img' => 'array',
-            'img.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'img.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $id_reference = $validatedData['id_reference'];
