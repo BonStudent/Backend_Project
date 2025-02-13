@@ -193,7 +193,6 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
         'MOEP',
         'OSTC',
         'Word_Program_Monitoring',
-        'MandatoryRequirements',
         'Images'
     ];
 
@@ -204,6 +203,44 @@ Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
 
     // Construct the full path to the file
     $path = $basePath . $folder . '/' . $filename;
+
+    // Check if the file exists
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    // Get the file content and MIME type
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    // Return the file as a response
+    return Response::make($file, 200)->header("Content-Type", $type);
+});
+
+// Route to serve files
+Route::get('/storage/{folder}/{subfolder}/{filename}', function ($folder, $subfolder, $filename) {
+    // Define the base storage path
+    $basePath = storage_path('app/public/');
+
+    // List of allowed folders
+    $allowedFolders = [
+        'Inventory',
+        'Investigation',
+        'Minahang_Bayan_Monitoring',
+        'MOEP',
+        'OSTC',
+        'Word_Program_Monitoring',
+        'MandatoryRequirements',
+        'Images'
+    ];
+
+    // Check if the requested folder is allowed
+    if (!in_array($folder, $allowedFolders)) {
+        abort(404);
+    }
+
+    // Construct the full path to the file
+    $path = $basePath . $folder . '/' . $subfolder . '/' . $filename;
 
     // Check if the file exists
     if (!File::exists($path)) {
