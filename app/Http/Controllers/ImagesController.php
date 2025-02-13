@@ -10,24 +10,13 @@ class ImagesController extends Controller
 {
     public function update(Request $request)
     {
-        // Extract id_reference from the request
-        $id_reference = $request->input('id_reference');
-
-        // Validate the uploaded images
-        $request->validate([
-            'img1.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img2.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img3.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img4.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img5.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img6.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img7.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img7.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img9.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'img10.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+        $validatedData = $request->validate([
+            'id_reference' => 'required|integer',
+            'img' => 'array',
+            'img.*' => 'image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        $id_reference = $validatedData['id_reference'];
 
-        // Find or create the Images record
         $imageRecord = Images::firstOrNew(['id_reference' => $id_reference]);
 
         $imgKeys = ['img1', 'img2', 'img3', 'img4', 'img5','img6', 'img7', 'img8', 'img9', 'img10'];
@@ -35,21 +24,22 @@ class ImagesController extends Controller
 
         foreach ($imgKeys as $imgKey) {
             if ($request->hasFile($imgKey)) {
-                // Delete old images
-                if (!empty($imageRecord->$imgKey)) {
-                    $oldimgPaths = json_decode($imageRecord->$imgKey, true);
-                    foreach ($oldimgPaths as $oldPath) {
-                        Storage::disk('public')->delete("Images/{$imgKey}/{$oldPath}");
+                // Delete old files if they exist
+                $oldFilePaths = json_decode($upload->$imgKey, true) ?? [];
+                foreach ($oldFilePaths as $oldPath) {
+                    if (Storage::disk('public')->exists("MandatoryRequirements/{$imgKey}/{$oldPath}")) {
+                        Storage::disk('public')->delete("MandatoryRequirements/{$imgKey}/{$oldPath}");
                     }
                 }
-
-                // Save new images
+    
+                // Store new files
                 $uploadedPaths = [];
                 foreach ($request->file($imgKey) as $img) {
-                    $originalName = time() . '-' . $img->getClientOriginalName(); // Add timestamp to avoid conflicts
-                    $path = $img->storeAs("Images/{$imgKey}", $originalName, 'public');
-                    $uploadedPaths[] = $originalName;
+                    $originalName = time() . '-' . $img->getClientOriginalName();
+                    $path = $img->storeAs("public/MandatoryRequirements/{$imgKey}", $originalName);
+                    $uploadedPaths[] = basename($path);
                 }
+    
                 $newImages[$imgKey] = $uploadedPaths;
             }
         }
