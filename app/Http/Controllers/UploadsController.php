@@ -85,100 +85,52 @@ class UploadsController extends Controller
     {
         $validatedData = $request->validate([
             'id_reference' => 'required|integer',
-            'file1.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file2.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file3.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file4.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file5.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file6.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file7.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file8.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file9.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
-            'file10.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
+            'files' => 'array',
+            'files.*' => 'nullable|file|mimes:pdf,doc,docx|max:50000',
         ]);
-
+    
         $id_reference = $validatedData['id_reference'];
-
-        // $upload = Uploads::where('id_reference', $id_reference)->firstOrNew(); // Retrieve the upload record
+    
+        // Get or create an upload record
         $upload = Uploads::firstOrNew(['id_reference' => $id_reference]);
-
-        $fileKeys = [
-            'file1',
-            'file2',
-            'file3',
-            'file4',
-            'file5',
-            'file6',
-            'file7',
-            'file8',
-            'file9',
-            'file10',
-        ];
-
+    
+        $fileKeys = ['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7', 'file8', 'file9', 'file10'];
         $newFiles = [];
-
+    
         foreach ($fileKeys as $fileKey) {
             if ($request->hasFile($fileKey)) {
+                // Delete old files if they exist
+                $oldFilePaths = json_decode($upload->$fileKey, true) ?? [];
+                foreach ($oldFilePaths as $oldPath) {
+                    if (Storage::disk('public')->exists("MandatoryRequirements/{$fileKey}/{$oldPath}")) {
+                        Storage::disk('public')->delete("MandatoryRequirements/{$fileKey}/{$oldPath}");
+                    }
+                }
+    
+                // Store new files
+                $uploadedPaths = [];
                 foreach ($request->file($fileKey) as $file) {
-                    // Use getClientOriginalName to get the original file name
-                    $originalName = $file->getClientOriginalName();
-                    $extension = $file->getClientOriginalExtension();
-                    // Construct the path including the original name and extension
-                    $path = "MandatoryRequirements/{$fileKey}/{$originalName}";
-                    // Store the file with its original name
-                    $file->storeAs("MandatoryRequirements/{$fileKey}", $originalName, 'public');
-
-                    // Store only the original file name
-                    $newFiles[$fileKey][] = $originalName;
-
-                    // Delete old file if exists
-                    if (isset($upload->$fileKey)) {
-                        $oldFilePaths = json_decode($upload->$fileKey, true);
-                        foreach ($oldFilePaths as $oldPath) {
-                            Storage::delete($oldPath);
-                        }
-                        unset($upload->$fileKey); // Remove old file path from model
-                    }
+                    $originalName = time() . '-' . $file->getClientOriginalName();
+                    $path = $file->storeAs("public/MandatoryRequirements/{$fileKey}", $originalName);
+                    $uploadedPaths[] = basename($path);
                 }
-            } else {
-                // No new files, just clean up old ones
-                if (isset($upload->$fileKey)) {
-                    $oldFilePaths = json_decode($upload->$fileKey, true);
-                    foreach ($oldFilePaths as $oldPath) {
-                        Storage::delete($oldPath);
-                    }
-                    unset($upload->$fileKey); // Remove old file path from model
-                }
+    
+                $newFiles[$fileKey] = $uploadedPaths;
             }
         }
-
-        $newUpload = new Uploads;
-
-        // Update the model with new file paths
+    
+        // Update the upload model
         foreach ($newFiles as $fileKey => $paths) {
-            $upload->$fileKey = json_encode(array_values($paths));
-            $newUpload->$fileKey = json_encode(array_values($paths));
+            $upload->$fileKey = json_encode($paths);
         }
-        // Before saving, ensure the upload has been modified
-        if (!$upload->isDirty()) {
-            // Optionally, handle the case where no changes were made
-            return response()->json([
-                'message' => 'No changes detected.',
-            ], 304);
-        }
-
-        // $upload->save();
-        if (!$upload) {
-            $newUpload->save();
-        } else {
-            $upload->save();
-        }
-
+    
+        $upload->save();
+    
         return response()->json([
             'message' => 'Update successful',
             'updated_files' => $newFiles,
         ], 200);
     }
-
+    
 
 }
